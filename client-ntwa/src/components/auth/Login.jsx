@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import AuthButton from '../shared/AuthButton'
 import Email from '../shared/Email'
@@ -13,7 +13,7 @@ const Login = () => {
 
     const [formData, setFormData] = useState({
         email: '',
-        Password: ''
+        password: ''
     });
 
     const [error, setError] = useState('');
@@ -55,12 +55,17 @@ const Login = () => {
                 
             <form className='w-full my-8' onSubmit={handleSubmit}>
                 <Email title="Email Address" value={formData.email} onChange={(e) => handleInputChange(e, 'email')}/>
-                <Password maintext="Password" subtext="Forgot" value={formData.Password} onChange={(e) => handleInputChange(e, 'password')}/>
+                <Password maintext="Password" subtext="Forgot" value={formData.password} onChange={(e) => handleInputChange(e, 'password')}/>
                 <AuthButton>Login</AuthButton>
             </form>
             <GoogleLogin/>
 
-            <p className='border-t border-black w-full pt-4 mb-4 text-center'>No account yet? sign up</p>
+            <p className='border-t border-black w-full pt-4 mb-4 text-center'>
+                No account yet? 
+                <Link to="/signup">
+                    <button>sign up</button>
+                </Link>
+            </p>
 
         </section>
     )

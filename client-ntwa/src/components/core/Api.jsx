@@ -7,6 +7,7 @@ const api = axios.create({
     }
 });
 
+//aataches token to all outgoing requests
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
 
@@ -36,9 +37,119 @@ export const postServices = {
               throw new Error('Error creating note');
           }
       }
+  },
+
+  ArchiveNote: async (id, data) => {
+    try {
+      const response = await api.post(`/notes/${id}/archive`, data)
+      return response.data
+    } catch (error) {
+      console.error("error posting note:", error)
+    }
+  }, 
+
+  RestoreNote: async (id, data) => {
+    try {
+      const response = await api.post(`/notes/archived/${id}/restore`, data)
+      return response.data
+    } catch (error) {
+      console.error("error posting note: ", error)
+    }
   }
 };
 
+export const fetchServices = {
+  fetchNotes: async() => {
+    try {
+      const response = await api.get("/notes")
+
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "an error occurred");
+    }
+  },
+
+  searchNotes: async (searchItem) => {
+    try {
+      const response = await api.get(`/notes?search=${encodeURIComponent(searchItem)}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  searchTags: async (tag) => {
+    try {
+      const response = await api.get(`/notes?tag=${encodeURIComponent(tag)}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  fetchArchivedNotes: async() => {
+
+    try {
+
+      const response = await api.get("/notes/archived")
+      return response.data
+
+    } catch (error) {
+      throw new Error(error.message || "an error occurred");
+    }
+  },
+
+  fetchNoteById: async(id) => {
+    try {
+      const response = await api.get(`/notes/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  fetchArchivedNoteById: async(id) => {
+    try {
+      const response = await api.get(`/notes/archived/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  updateFetchedNote: async(id, updatedNote) => {
+    
+    try {
+      const response = await api.put(`/notes/${id}`, updatedNote)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  updateFetchedArchivedNote: async(id, updatedNote) => {
+    
+    try {
+      const response = await api.put(`/notes/archived/${id}`, updatedNote)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  },
+
+  deleteNote: async(id) =>{
+    try { 
+      const response = await api.delete(`/notes/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
+  }
+
+}
+
+
+//sign up function
 export const authServices = {
   signup: async(userData) => {
     try {
@@ -72,6 +183,7 @@ export const authServices = {
     }
   },
 
+  //login function
   login: async (credentials) => {
     try {
       const response = await api.post("/login", credentials);
@@ -102,5 +214,61 @@ export const authServices = {
 
   isAuthenticated: () => {
     return !!localStorage.getItem('token')
+  },
+
+  //function to check if the token is valid with our backend
+  verifyToken: async () => {
+   
+    const token = localStorage.getItem('token')
+    if (!token) return false;
+
+    try {
+      await api.post('/verify-token');
+      return true;
+    } catch {
+      localStorage.removeItem('token');
+      return false;
+    }   
+  },
+
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await api.post("/forgot-password", {email})
+      return response.data
+    } catch(error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          throw new Error("Email address not found")
+        }
+        throw new Error(error.response.data.error || "failed to send reset email")
+      } else if (error.request) {
+        throw new Error("Netwrok error - please check your connection");
+
+      } else {
+        throw new Error("Error reuesting password reset")
+      }
+    }
+  },
+
+  resetPassword: async ({ token, newPassword}) => {
+    try {
+      const response = await api.post("/password-reset", {
+        token, 
+        newPassword
+  
+      })
+      return response.data
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          throw new Error("Invalid or expired reset token")
+        }
+        throw new Error(error.response.data.error || 'Failed to reset password') 
+      } else if(error.request) {
+        throw new Error("Network error - please check your connection")
+      } else {
+        throw new Error("Failed to reset password")
+      }
+    }
   }
 } 

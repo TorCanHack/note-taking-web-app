@@ -54,7 +54,7 @@ const SignUp = () => {
             newErrors.password = "Password is required"
         } else if (formData.password.length < 8) {
             newErrors.password = "Password must be at least 8 characters long"
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*[/d])(?=.[@$!%*?&])/.test(formData.password)) {
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.[@$!%*?&])/.test(formData.password)) {
             newErrors.password = "Password must have at least one lowercase letter, uppercase letter, one number and one special character"
         }
         setErrors(newErrors)
@@ -80,6 +80,7 @@ const SignUp = () => {
             setGeneralError(error.message || "an error occurred during signup");
         } finally {
             setIsLoading(false)
+            
         }
 
     }
@@ -90,11 +91,11 @@ const SignUp = () => {
             <div className="mb-2">
                 {generalError && <p>{generalError}</p>}
             </div>
-            <Email title="Email" value={formData.value} onChange={(e) => handleInputChange(e, 'email')} error={errors.email}/>
-            <Password maintext="Password" value={formData.value} onChange={(e) => handleInputChange(e, 'password')} error={errors.password}/>
+            <Email title="Email" value={formData.email} onChange={(e) => handleInputChange(e, 'email')} error={errors.email}/>
+            <Password maintext="Password" value={formData.password} onChange={(e) => handleInputChange(e, 'password')} error={errors.password}/>
             <AuthButton disabled={isLoading}>{isLoading? "Creating account..." : "sign up"}</AuthButton>
             <GoogleLogin/>
-            <p className="text-center mb-2 text-gray-600">Already have an account? <Link className="text-black">Login</Link></p>
+            <p className="text-center mb-2 text-gray-600">Already have an account? <Link  to="/login" className="text-black">Login</Link></p>
         </form>
     )
 

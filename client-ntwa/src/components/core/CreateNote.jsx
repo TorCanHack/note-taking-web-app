@@ -4,87 +4,90 @@ import tag_icon from '../../assets/images/icon-tag.svg'
 import clock_icon from '../../assets/images/icon-clock.svg'
 import arrow_left from '../../assets/images/icon-arrow-left.svg'
 
-const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate}) => {
+const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, onClose}) => {
 
     
+    //state for form validation
+    const [errors, setErrors] = useState({});
     
-        //state for form validation
-        const [errors, setErrors] = useState({});
-    
-        //handle input function 
-        const handleInputChange = (e) => {
-            const { name, value } = e.target;
+    //handle input function 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
 
-             // Handle tags separately as they need to be converted to an array
-            if (name === 'tag') {
-                const tagsArray = value.split(',').map(tag => tag.trim());
-                setCurrentNote(prev => ({
-                    ...prev,
-                    [name]: tagsArray
-                }));
-            } else {
-                setCurrentNote(prev => ({
-                    ...prev,
-                    [name]: value
-                }));
-            }
+        // Handle tags separately as they need to be converted to an array
+        if (name === 'tags') {
+            const tagsArray = value.split(',').map(tag => tag.trim());
+            setCurrentNote(prev => ({
+                ...prev,
+                [name]: tagsArray
+            }));
+        } else {
+            setCurrentNote(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
             
     
-            if(errors[name]){
-                setErrors(prev => ({
-                    ...prev,
-                    [name]: ""
-                }));
+        if(errors[name]){
+            setErrors(prev => ({
+                ...prev,
+                [name]: ""
+            }));
     
-            }
-        };
+        }
+    };
     
-        //handle form submission
-        const handleFormSubmission = async (e) => {
-            e.preventDefault();
+    //handle form submission
+    const handleFormSubmission = async (e) => {
+        e.preventDefault();
             
-            //validate forms
-            const newErrors = {};
+        //validate forms
+        const newErrors = {};
     
-            if (!currentNote.title.trim()) {
-                newErrors.title = "Title is required"
+        if (!currentNote.title.trim()) {
+            newErrors.title = "Title is required"
     
-            }
-    
-            if (!currentNote.content.trim()) {
-                newErrors.content = "Content is required"
-            }
-    
-            if(Object.keys(newErrors).length > 0 ) {
-                setErrors(newErrors);
-                return;
-            }
-    
-            try {
-                const response = await postServices.postNote(currentNote);
-                
-                // add new note to the list
-                setNotes(prevNote => [response.data, ...prevNote])
-    
-                //clear the form
-                setCurrentNote({
-                    title: "",
-                    content: "",
-                    tag: [],
-                    color: '#ffffff',
-                    createdAt: Date.now()
-                })
-            } catch(error) {
-                console.error("Error creating not", error)
-            }
-    
-        };
-
-        const handleBackButton = () => {
-            setCreate(false)
         }
     
+        if (!currentNote.content.trim()) {
+            newErrors.content = "Content is required"
+        }
+    
+        if(Object.keys(newErrors).length > 0 ) {
+            setErrors(newErrors);
+            return;
+        }
+    
+        try {
 
+            const noteToSubmit = {...currentNote, lastEdited: Date.now() }
+            const savedNote = await postServices.postNote(noteToSubmit);
+
+                
+            // add new note to the list
+            setNotes(prevNote => [savedNote, ...prevNote])
+    
+            //clear the form
+            setCurrentNote({
+                title: "",
+                content: "",
+                tags: [],
+                color: '#ffffff',
+                createdAt: Date.now()
+            })
+            onClose();
+        } catch(error) {
+             console.error("Error creating not", error)
+        }
+    
+    };
+
+    const handleBackButton = (e) => {
+        e.preventDefault();
+        onClose();
+    }
+    
     return ( 
         <form className='relative bottom-3 right-4 w-375 rounded-t-md z-10  border border-transparent px-4 md:w-768' onSubmit={handleFormSubmission} >
             <div className='border-b border-black flex flex-row justify-between py-2'>
@@ -94,6 +97,7 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate}) =
                 </button>
 
                 <div className='flex justify-between  w-32'>
+                    
                     <button className='text-sm text-gray-600'>Cancel</button>
                     <button type='submit' className='text-blue-400 text-sm'>Save Note</button>
                 </div>
@@ -111,7 +115,7 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate}) =
 
                     </div>
                     
-                    <textarea type="text" name="tag" value={currentNote.tag} onChange={handleInputChange} placeholder='Add tags seprated by commas (e.g. Work, Planing)' className='inline-block placeholder:text-xs h-8 resize-none'/>
+                    <textarea type="text" name="tags" value={currentNote.tags} onChange={handleInputChange} placeholder='Add tags seprated by commas (e.g. Work, Planing)' className='inline-block placeholder:text-xs h-8 resize-none'/>
                 </div>  
 
                 <div className='flex flex-row  items-center mb-3'>
@@ -128,6 +132,7 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate}) =
 
             </div>
             <textarea name='content' value={currentNote.content} onChange={handleInputChange} placeholder='Start your typing here...' className={errors.content ? 'border-red-600' : ' resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3' }></textarea>
+            <p>{errors.content}</p>
             
         </form>
     )

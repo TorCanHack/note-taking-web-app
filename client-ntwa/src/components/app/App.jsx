@@ -1,12 +1,17 @@
 import './App.css'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg'
 import Login from '../auth/Login'
 import ForgottenPassword from '../auth/ForgottenPassword'
 import PasswordReset from '../auth/PasswordReset'
 import SignUp from '../auth/SignUp'
-import { useState } from 'react';
 import Notes from '../core/Notes'
+import ArchivedNotes from '../core/ArchivedNotes';
+import Search from '../core/Search';
+import Tags from '../core/Tags';
+import { ThemeProvider } from '../shared/ThemeProvider';
+import Settings from '../core/Settings';
 
 // protected Route component to handle authentication
 const ProtectedRoute = ({ children }) => {
@@ -19,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
 }
 
 //layout component to maintain consistent header accross pages
-const layout = ({ children }) => {
+const Layout = ({ children }) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('token');
 
@@ -35,7 +40,7 @@ const layout = ({ children }) => {
             <img 
               src={logo} 
               alt='logo' 
-              className='h-8 translate-y-1/2' 
+              className='h-8 ' 
               onClick={() => navigate('/')}
               style={{ cursor: 'pointer' }}
             />
@@ -58,11 +63,59 @@ const layout = ({ children }) => {
 
 function App() {
 
-  
-  
+   const [create, setCreate] = useState(false);
+   
 
+ 
+  
   return (
-    
+    <ThemeProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            {/*public routes*/}
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/signup' element={<SignUp/>}/>
+            <Route path='/forgot-password' element={<ForgottenPassword/>}/>
+            <Route path='/reset-password' element={<PasswordReset/>}/>
+
+            {/*private route */}
+            <Route path='/' element={
+              <ProtectedRoute>
+                <Notes create={create} setCreate={setCreate} />
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/archive' element={
+              <ProtectedRoute>
+                <ArchivedNotes setCreate={setCreate} />
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/search' element={
+              <ProtectedRoute>
+                <Search setCreate={setCreate}/>
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/tags' element={
+              <ProtectedRoute>
+                <Tags setCreate={setCreate}/>
+              </ProtectedRoute>
+            }/>
+
+            <Route path='/settings' element={
+              <ProtectedRoute>
+                <Settings/>
+              </ProtectedRoute>
+            }/>
+
+            {/*Catch all routes for 404s */}
+            <Route path='*' element={<Navigate to='/' replace/>}/>
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

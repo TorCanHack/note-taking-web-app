@@ -4,12 +4,17 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
 
-      
-
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Noto Serif', 'serif'],
+        mono: ['Source Code Pro', 'monospace'],
+      },
       height: {
+        72: '72px',
         511: '511px',
         950:  '950px'
       }, 
