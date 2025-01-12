@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Password from '../shared/Password';
 
 const api = axios.create({
     baseURL: 'http://localhost:3000/api',
@@ -18,6 +19,25 @@ api.interceptors.request.use(config => {
   return config;
 });
 
+export const passwordServices = {
+
+  passwordChange: async (currentPassword, newPassword) => {
+    try {
+
+      const response = await api.post("/change-password", {currentPassword, newPassword} ) 
+      return response.data
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          throw new Error("current password is incorrect")
+        } 
+      } else {
+        throw new Error("failed to reset password")
+      }
+    }
+  }
+
+}
 // Export the services with proper error handling
 export const postServices = {
   postNote: async (data) => {

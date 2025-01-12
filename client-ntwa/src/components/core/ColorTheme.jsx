@@ -6,20 +6,22 @@ import moon_icon from '../../assets/images/icon-moon.svg';
 import system_icon from '../../assets/images/icon-system-theme.svg';
 import arrow_left_icon from '../../assets/images/icon-arrow-left.svg';
 
-const ColorTheme = () => {
+const ColorTheme = ({setIsThemeModalOpen, setIsModalOpen}) => {
 
     const {theme, setTheme} = useTheme()
     const navigate = useNavigate();
 
     const handleBackToSettings = () => {
         navigate('/settings')
+        setIsThemeModalOpen(false)
+        setIsModalOpen(false)
 
     }
 
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 min-h-620 ">
-            <button onClick={handleBackToSettings}>
-                <img src={arrow_left_icon} alt='arrow icon'/>
+        <section className=" min-h-620 ">
+            <button onClick={handleBackToSettings} className="flex flex-row items-center text-sm text-gray-700">
+                <img src={arrow_left_icon} alt='arrow icon' className='h-5 w-5'/>
                 Settings
             </button>
             <form>

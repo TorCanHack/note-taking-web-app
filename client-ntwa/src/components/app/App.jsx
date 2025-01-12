@@ -28,10 +28,7 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('token');
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login')
-  };
+  
 
   return (
     <main className='flex flex-col justify-center items-center w-375 py-8 md:w-768'>
@@ -44,14 +41,7 @@ const Layout = ({ children }) => {
               onClick={() => navigate('/')}
               style={{ cursor: 'pointer' }}
             />
-            {isAuthenticated && (
-              <button 
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Logout
-              </button>
-            )}
+            
         </div>
         {children}
     </section>
@@ -106,7 +96,7 @@ function App() {
 
             <Route path='/settings' element={
               <ProtectedRoute>
-                <Settings/>
+                <Settings setCreate={setCreate}/>
               </ProtectedRoute>
             }/>
 

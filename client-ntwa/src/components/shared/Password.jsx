@@ -1,14 +1,26 @@
 import PropTypes from 'prop-types';
 import icon_hide_password from '../../assets/images/icon-hide-password.svg' 
+import icon_show_password from '../../assets/images/icon-show-password.svg'
+import { useState } from 'react';
 
 const Password = ({ maintext, subtext, value, onChange, error }) => {
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = (e) => {
+        e.preventDefault();
+        setShowPassword(!showPassword)
+    }
 
     return (
         <label >
             <span className=' block text-left text-sm '>{maintext} <a className='relative left-56 text-xs underline md:left-82'>{subtext}</a></span>
-            <input className='w-full h-10 border border-black rounded-xl ' value={value} onChange={onChange}/>
-            <button className='relative bottom-8 left-72 md:left-97'>
-                <img src={icon_hide_password} alt='hide password'/>
+            <input type={showPassword? 'text' : 'password'} className='w-full h-10 border border-black rounded-xl ' value={value} onChange={onChange}/>
+            <button type='button' onClick={togglePasswordVisibility} className='relative bottom-8 left-72 md:left-97'>
+                {showPassword? 
+                    <img src={icon_hide_password} alt='hide password'/> 
+                    : <img src={icon_show_password} alt='show password'/>
+                } 
         
             </button>
                             
@@ -19,6 +31,11 @@ const Password = ({ maintext, subtext, value, onChange, error }) => {
 
 Password.propTypes = {
     maintext: PropTypes.node.isRequired,
+    subtext: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    error: PropTypes.string
+
     
 }
 

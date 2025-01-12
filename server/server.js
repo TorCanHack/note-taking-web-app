@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
+const { error } = require("console");
 
 
 require('dotenv').config();
@@ -130,6 +131,95 @@ app.post("/api/login", async (req, res) => {
     } catch (error) {
         console.log(error.message)
         res.status(400).send({error: error.message });
+    }
+})
+
+app.post("/api/forgot-password", async (req, res) => {
+
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email })
+
+        if(!user) {
+            return res.status(404).send({error: "user not found"});
+        }
+
+        // generate reset token
+        const resetToken = jwt.sign(
+            {userId: user._id},
+            process.env.JWT_SECRET,
+            {expiresIn: '1h'}
+        )
+
+        //save reset token to user
+        user.resetToken = resetToken;
+        user.resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+        await user.save();
+
+        // In a real application, you would send an email here with the reset link
+        // For now, we'll just return the token in the response
+        res.send({
+            message: "password reset email sent",
+            resetToken: resetToken
+        })
+    } catch (error) {
+        console.error("Password reset request error: ", error)
+        res.status(500).send({error: "Error processing password reset request"})
+    }
+})
+
+// route for changing password with token
+app.post("/api/password-reset", async (req, res) => {
+    try {
+        const {token, newPassword} = req.body;
+
+        //verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        const user = await User.findOne({
+            _id: decoded.userId,
+            resetToken: token,
+            resetTokenExpiry: {$gt: Date.now()}
+
+        })
+
+        if(!user){
+            res.status(404).send({error: "Invalid or expired reset token"})
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+        user.password = hashedPassword;
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined;
+
+        res.send({message: "Password succesfully reset"})
+    } catch (error) {
+        console.error("Password reset error: ", error)
+        if (error.name === 'JsonWebTokenError'){
+            res.status(400).send({error: "Invalid reset token"})
+        }
+        res.status(500).send({error: "Error resetting password"})
+    }
+})
+
+//route for changing password when user is logged in
+app.post("/api/change-password", auth, async (req, res) => {
+    try {
+        const { currentPassword, newPassword} = req.body;
+
+        const isMatch = await bcrypt.compare(currentPassword, req.user.password)
+        if(!isMatch) {
+            res.status(404).send({error: 'Current password is incorrect'})
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+        req.user.password = hashedPassword;
+        await req.user.save()
+
+        res.send({message: "Password successfully changed"})
+    } catch (error) {
+        console.error("password chnage error", error)
+        res.status(500).send({error: "Error changing password"})
     }
 })
 
