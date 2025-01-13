@@ -44,19 +44,22 @@ const ArchivedNotes = ( {setCreate} ) => {
             {!archivedNoteId ? <div>
             <div className="min-h-620">
                 <h1 className="font-bold text-2xl mb-3 ">Archived Notes</h1>
-                <p>All your archived notes are stored here. You can restore them or delete them anytime</p>
+                <p className="mb-3">All your archived notes are stored here. You can restore them or delete them anytime</p>
                 {archivedNote.map(note => (
-                    <div key={note._id}>
-                        <h2 className="font-semibold text-base">
+                    <div 
+                        key={note._id}
+                        className="border-b border-gray-300 pb-3 my-3"
+                    >
+                        <h2 className="font-semibold text-base mb-2">
                             <button onClick={() =>handleArchiveNoteClick(note._id)}>
                                 {note.title}</button></h2>
-                        <ul className="flex flex-row">
+                        <ul className="flex flex-row mb-2">
 
                             {note.tags.map((tag, i) => (
                                 <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1">{tag}</li>
                             ))}
                         </ul>
-                        <p className="text-xs text-gray-700">{new Date(note.lastEdited).toLocaleDateString('en-GB', {
+                        <p className="text-xs text-gray-700 mb-2">{new Date(note.lastEdited).toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: 'short',
                             year: 'numeric'

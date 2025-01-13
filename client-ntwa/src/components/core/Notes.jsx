@@ -57,7 +57,7 @@ const Notes = ({create, setCreate}) => {
 
     return (
         <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 ">
-            { !create ? <div> <article className="min-h-620 "> <h1 className="font-bold text-2xl mb-3 ">All Notes</h1>
+            { !create ? <div> <article className="min-h-620 mb-3 "> <h1 className="font-bold text-2xl mb-3 ">All Notes</h1>
 
      
             <div>
@@ -65,17 +65,18 @@ const Notes = ({create, setCreate}) => {
 
                 notes.map(note => (
                     
-                <div key={note._id} className="border-b border-gray-400">
+                <div key={note._id} className="border-b border-gray-400 pb-3 my-3">
                     
-                    <h2 className="font-semibold text-base">
+                    <h2 className="font-semibold text-base mb-3">
                         <button onClick={() => handleNoteClick(note._id)}>{note.title}</button>
 
                     </h2>
-                    <ul className="flex flex-row">
+                    {note.tags.length > 0  && <ul className="flex flex-row mb-3">
                         {note.tags.map((tag, i) => (
                         <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1">{tag}</li>
                         ))}
-                    </ul>
+                    </ul>}
+                    
                     <p className="text-xs text-gray-700">{new Date(note.lastEdited).toLocaleDateString('en-GB', {
                         day: '2-digit',
                         month: 'short',
@@ -88,7 +89,8 @@ const Notes = ({create, setCreate}) => {
 
             </div></article>
                         
-            <PlusButton/>
+            <PlusButton setCreate={setCreate}/>
+            <div className="mt-3"></div>
 
             <Navigation/>
             

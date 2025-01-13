@@ -14,6 +14,7 @@ export default {
         mono: ['Source Code Pro', 'monospace'],
       },
       height: {
+        52: '52px',
         72: '72px',
         511: '511px',
         950:  '950px'
@@ -29,6 +30,8 @@ export default {
       },
       width: {
         132: '132px',
+        247: '247px',
+        343: '343px',
         375: '375px',
         522: '522px',
         540: '540px',

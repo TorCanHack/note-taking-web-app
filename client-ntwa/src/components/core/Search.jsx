@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { fetchServices } from './Api';
 import search_icon from '../../assets/images/icon-search.svg'
+import ReactLoading from "react-loading";
+import Navigation from '../shared/Navigation';
+import PlusButton from '../shared/PlusButton';
 
 const Search = ({setCreate}) => {
 
@@ -49,21 +52,43 @@ const Search = ({setCreate}) => {
 
     return (
         <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 ">
-            <div>
+            <div className='min-h-620'>
                 <h1 className="font-bold text-2xl mb-3 ">Search</h1>
-                <input value={searchInput} onChange={handleSearchInput} className='w-full h-4'/>
+                <input 
+                    name='search' 
+                    value={searchInput} 
+                    onChange={handleSearchInput} 
+                    className='w-full h-52 border border-gray-500 rounded-lg bg-gray-200 px-10'
+                />
+                <img 
+                    src={search_icon}
+                    alt='search icon'
+                    className='relative bottom-9 left-4'
+                />
                 <div>
-                    <div>{isLoading && <p>Loading...</p>}</div>
-                    {notes.map(note => (
-                        <div key={note._id}>
-                            <h2>{note.title}</h2>
+                    {isLoading && <div className="block mx-auto  w-20">
+                        <ReactLoading 
+                            type="bars" 
+                            color="blue" 
+                            height={50} 
+                            width={50} 
+                        />
+                    </div>}
+                    {searchInput && <p>All notes matching &#34;{searchInput}&#34; are displayed below </p>}
+                    {searchInput && ( notes.length > 0 ?  
+                        (notes.map(note => (
+                            <div key={note._id}>
+                                <h2>{note.title}</h2>
 
-                        </div>
-                        
-                    ))}
+                            </div>))) 
+                        : (<p className='bg-gray-300 rounded-lg p-3 mt-4'> no notes match your search try a different keyword or create a new note</p>))
+                    }
                 </div>
 
             </div>
+            <PlusButton setCreate={setCreate}/>
+            <div className='mt-3'></div>
+            <Navigation/>
             
 
         </section>

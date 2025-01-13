@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 const { error } = require("console");
+const { type } = require("os");
+const Sentiment = require('sentiment');
+const sentimentAnalyzer = new Sentiment()
 
 
 require('dotenv').config();
@@ -36,7 +39,10 @@ const noteSchema = Schema ({
     content: {type: String, required: true},
     tags: [String],
     color: String,
+    sentiment: {type: String, default: null},
+    moodScore: {type: Number, default: null},
     lastEdited: {type: Date, default: Date.now}
+
 })
 
 const archiveSchema = Schema ({
@@ -46,6 +52,8 @@ const archiveSchema = Schema ({
     content: {type: String, required: true},
     tags: [String],
     color: String,
+    sentiment: {type: String, default: null},
+    moodScore: {type: Number, default: null},
     lastEdited: {type: Date, default: Date.now},
     archivedAt: {type: Date, default: Date.now}
 })
@@ -225,7 +233,18 @@ app.post("/api/change-password", auth, async (req, res) => {
 
 app.post("/api/notes", auth, async (req, res) => {
     try {
-        const note = new Note({...req.body, userId: req.user._id})
+        const {content} = req.body;
+        const sentimentResult = sentimentAnalyzer.analyze(content)
+        const moodscore = sentimentResult.score;
+        const sentiment = moodscore > 0? '😊' : moodscore < 0 ? '☹️' : '😶'
+        
+
+        const note = new Note({
+            ...req.body, 
+            userId: req.user._id,
+            sentiment,
+            moodscore
+        })
         await note.save();
         res.status(201).send(note)
     } catch (error) {
@@ -276,9 +295,16 @@ app.get("/api/notes/archived", auth, async (req, res) => {
 
 app.put("/api/notes/:_id", auth, async (req, res) => {
     try {
+
+        const {content} = req.body
+        const sentimentResult = sentimentAnalyzer.analyze(content || '')
+        const moodscore = sentimentResult.score;
+        const sentiment = moodscore > 0? '😊' : moodscore < 0 ? '☹️' : '😶'
+        
+
         const note = await Note.findOneAndUpdate(
             {_id: req.params._id, userId: req.user._id},
-            {...req.body, lastEdited: Date.now()},
+            {...req.body, sentiment, moodscore, lastEdited: Date.now()},
             {new: true}
         );
         if (!note) return res.status(404).send();
@@ -290,9 +316,14 @@ app.put("/api/notes/:_id", auth, async (req, res) => {
 
 app.put("/api/notes/archived/:_id", auth, async (req, res) => {
     try {
+        const {content} = req.body
+        const sentimentResult = sentimentAnalyzer.analyze(content || '')
+        const moodscore = sentimentResult.score;
+        const sentiment = moodscore > 0? '😊' : moodscore < 0 ? '☹️' : '😶'
+
         const archivedNote = await Archive.findOneAndUpdate(
             {_id: req.params._id, userId: req.user._id},
-            {...req.body, lastEdited: Date.now()},
+            {...req.body, sentiment, moodscore, lastEdited: Date.now()},
             {new: true}
         );
         if (!archivedNote) return res.status(404).send();
@@ -351,6 +382,8 @@ app.post("/api/notes/:_id/archive", auth, async (req, res) => {
             title: note.title,
             content: note.content,
             tags: note.tags,
+            sentiment: note.sentiment,
+            moodscore: note.moodscore,
             createdAt: note.createdAt
         })
 
