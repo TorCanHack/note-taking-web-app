@@ -29,7 +29,7 @@ const Settings = ({setCreate}) => {
         navigate('/login')
     }
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950  "> { !isModalOpen ?
+        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950  "> { !isModalOpen ?
             <div className='flex flex-col min-h-620'>
                 <h1 className='font-bold text-2xl mb-7'>Settings</h1>
 

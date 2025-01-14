@@ -56,7 +56,7 @@ const Notes = ({create, setCreate}) => {
    }, [noteId])
 
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 ">
+        <section className="w-375 largePhone:w-410 bg-white rounded-t-lg pt-3 px-4  ">
             { !create ? <div> <article className="min-h-620 mb-3 "> <h1 className="font-bold text-2xl mb-3 ">All Notes</h1>
 
      

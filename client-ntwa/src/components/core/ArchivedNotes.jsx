@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 import { fetchServices } from "./Api";
 import Navigation from "../shared/Navigation";
 import PlusButton from "../shared/PlusButton";
@@ -40,7 +40,7 @@ const ArchivedNotes = ( {setCreate} ) => {
     }
 
     return(
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950">
+        <section className=" bg-white rounded-t-lg pt-3 px-4  w-375 largePhone:w-410 md:w-768 lg:w-950">
             {!archivedNoteId ? <div>
             <div className="min-h-620">
                 <h1 className="font-bold text-2xl mb-3 ">Archived Notes</h1>

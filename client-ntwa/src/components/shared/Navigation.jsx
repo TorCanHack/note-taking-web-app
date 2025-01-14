@@ -34,7 +34,7 @@ const Navigation = () => {
     }
 
     return (
-        <section className='relative right-4  flex flex-row justify-around items-center w-375 py-4 border-t border-black md:w-768 '>
+        <section className='relative right-4 w-375 flex flex-row justify-around items-center  py-4 border-t border-black largePhone:w-410'>
             <button onClick={handleNavigationHome}>
                 <img src={home_icon} alt=" icon"/>
             </button>

@@ -6,6 +6,8 @@ import delete_icon from '../../assets/images/icon-delete.svg'
 import tag_icon from '../../assets/images/icon-tag.svg'
 import clock_icon from '../../assets/images/icon-clock.svg'
 import arrow_left from '../../assets/images/icon-arrow-left.svg'
+import Navigation from "../shared/Navigation"
+import EditArchivedNote from "./EditArchivedNote"
 
 
 const EditNote = ({noteId, onClose, setNoteId, source}) => {
@@ -22,6 +24,10 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     })
     const [error, setError] = useState({})
     const [deleteModal, setDeleteModal] = useState(false);
+    const [archiveModal, setArchiveModal] = useState(false);
+    const [freshlyArchived, setFreshlyArchived] = useState(false)
+    const [showArchivedNote, setShowArchivedNote] = useState(false)
+    const [archivedNoteId, setArchivedNoteId] = useState(null);
 
     
 
@@ -57,6 +63,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
         e.preventDefault();
         
         
+        
         if (source === "tags") {
             navigate("/tags")
             setNoteId(null)
@@ -73,6 +80,21 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     const activateDeleteModal = (e) => {
         e.preventDefault();
         setDeleteModal(true)
+    }
+
+    const handleDeleteCancelButton = (e) => {
+        e.preventDefault();
+        setDeleteModal(false)
+    }
+
+    const activateArchiveModal = (e) => {
+        e.preventDefault();
+        setArchiveModal(true)
+    }
+
+    const handleArchiveCancelButton = (e) => {
+        e.preventDefault();
+        setArchiveModal(false)
     }
 
     const handleDeleteButton = async (e) => {
@@ -92,15 +114,34 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
         e.preventDefault();
 
         try {
-            await postServices.ArchiveNote(noteId, note)
+            const archivedNote = await postServices.ArchiveNote(noteId, note)
+            setArchivedNoteId(archivedNote._id)
+            setShowArchivedNote(true)
+            setFreshlyArchived(true)
+            setArchiveModal(false)
             onClose()
         } catch (error) {
             setError(error)
         }
     }
 
+    if (showArchivedNote && archivedNoteId) {
+        return (
+            <EditArchivedNote 
+                archivedNoteId={archivedNoteId}
+                setArchivedNoteId={setArchivedNoteId}
+                freshlyArchived={freshlyArchived}
+                setFreshlyArchived={setFreshlyArchived}
+            />
+        );
+    }
+
     return (
-        <form onSubmit={handleFormSubmission}>
+        <form 
+            onSubmit={handleFormSubmission}
+            
+        >
+            {(deleteModal || archiveModal) && (<div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20 "></div>)}
             <div className='border-b border-black flex flex-row justify-between py-2'>
                 <button 
                     className='flex flex-row items-center  w-28 text-sm text-gray-600' 
@@ -124,7 +165,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         />
                     </button>
 
-                    <button onClick={handleArchiveButton}>
+                    <button onClick={activateArchiveModal}>
                         <img 
                             src={archive_icon} 
                             alt="archive_icon" 
@@ -203,7 +244,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         className="text-sm resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3"
                     />
 
-                    {deleteModal && (<div className="relative bottom-97 w-343 h-48 p-4 rounded-lg border border-black z-30">
+                    {deleteModal  && (<div className="relative bottom-97 w-343 h-48 p-4 rounded-lg border border-black z-30 bg-white">
                         <div className="flex flex-row justify-between items-center border-b border-black">
                             <div className="flex flex-col justify-center items-center bg-gray-200 h-10 w-10 rounded-xl">
                                 <img
@@ -220,7 +261,12 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
 
                         </div>
                         <div className="flex flex-row justify-end  pt-4">
-                            <button className="h-10 w-24 bg-gray-200 rounded-xl">Cancel</button>
+                            <button 
+                                className="h-10 w-24 bg-gray-200 rounded-xl"
+                                onClick={handleDeleteCancelButton}
+                            >
+                                Cancel
+                            </button>
                             <button 
                                 onClick={handleDeleteButton}
                                 className="h-10 w-28 bg-red-600 rounded-xl ml-3"
@@ -232,6 +278,39 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         
 
                     </div>)}
+                    {archiveModal && (<div className="relative bottom-97 w-343 h-auto p-4 rounded-lg border border-black z-30 bg-white">
+                        <div className="flex flex-row justify-between items-center border-b border-black">
+                            <div className="flex flex-col justify-center items-center bg-gray-200 h-10 w-10 rounded-xl">
+                                <img
+                                    src={archive_icon}
+                                    alt="archive icon"
+                                
+                                />
+                            </div>
+                            <div className="flex flex-col w-247 mb-4">
+                                <h3 className="text-base font-bold mb-1">Archive Note</h3>
+                                <p className="text-sm">Are you sure you want to archive this note? You can find it in the archived section and restore it anytime.</p>
+
+                            </div>
+
+                        </div>
+                        <div className="flex flex-row justify-end  pt-4">
+                            <button 
+                                className="h-10 w-24 bg-gray-200 rounded-xl"
+                                onClick={handleArchiveCancelButton}
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={handleArchiveButton}
+                                className="h-10 w-28 bg-blue-600 rounded-xl ml-3"
+                            >
+                                Archive
+                            </button>
+                        </div>
+                        
+                    </div>)}
+                    <Navigation/>
         </form>
     )
 

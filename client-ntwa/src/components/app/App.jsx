@@ -26,13 +26,13 @@ const ProtectedRoute = ({ children }) => {
 //layout component to maintain consistent header accross pages
 const Layout = ({ children }) => {
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem('token');
-
   
 
+
+
   return (
-    <main className='flex flex-col justify-center items-center w-375 py-8 md:w-768'>
-      <section className='bg-gray-200'>
+    <main className='flex flex-col justify-center items-center w-375 largePhone:w-410  '>
+      <section className='bg-gray-200 '>
         <div className='h-14 flex justify-between items-center px-4'>
             <img 
               src={logo} 
@@ -54,6 +54,7 @@ const Layout = ({ children }) => {
 function App() {
 
    const [create, setCreate] = useState(false);
+   
    
 
  

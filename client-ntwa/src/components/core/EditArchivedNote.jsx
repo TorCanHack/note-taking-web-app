@@ -5,9 +5,12 @@ import clock_icon from '../../assets/images/icon-clock.svg'
 import arrow_left from '../../assets/images/icon-arrow-left.svg'
 import { useState, useEffect } from 'react'
 import { fetchServices, postServices } from './Api'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 
-const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId, }) => {
+const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived, setFreshlyArchived }) => {
+
+    const navigate = useNavigate()
 
     
 
@@ -54,6 +57,7 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId, }) => {
     const handleBackButton = (e) => {
     
         e.preventDefault();
+        navigate("/archive")  
         setArchivedNoteId(null)
     
     
@@ -76,6 +80,8 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId, }) => {
     
         try {
             await postServices.RestoreNote(archivedNoteId, archivedNote)
+            navigate("/archive")
+            setArchivedNoteId(null)
         } catch (error) {
             setError(error)
         }
@@ -136,6 +142,8 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId, }) => {
                 
             </div>
             <textarea name='content' value={archivedNote.content} onChange={(e) => setArchivedNote({...archivedNote, content: e.target.value})} placeholder='Start your typing here...' className="text-sm resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3"></textarea>
+
+            {freshlyArchived && <p>Note Archived</p>}
         </form>
     )
 

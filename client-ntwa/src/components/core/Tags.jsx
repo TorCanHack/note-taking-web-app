@@ -73,7 +73,7 @@ const Tags = ({setCreate}) => {
     }, [])
 
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 ">
+        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950 ">
             {!selectedTag ? 
             <div className="min-h-620"> 
                 <h1 className="font-semibold text-2xl mb-5">Tags</h1>
