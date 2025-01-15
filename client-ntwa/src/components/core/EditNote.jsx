@@ -119,7 +119,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
             setShowArchivedNote(true)
             setFreshlyArchived(true)
             setArchiveModal(false)
-            onClose()
+            
         } catch (error) {
             setError(error)
         }
@@ -140,9 +140,11 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
         <form 
             onSubmit={handleFormSubmission}
             
+            
         >
+            <div className="block min-h-620 md:min-h-1024 ">
             {(deleteModal || archiveModal) && (<div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20 "></div>)}
-            <div className='border-b border-black flex flex-row justify-between py-2'>
+            <div className='border-b border-black flex flex-row justify-between py-2 '>
                 <button 
                     className='flex flex-row items-center  w-28 text-sm text-gray-600' 
                     onClick={handleBackButton}
@@ -183,8 +185,8 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                     </button>
                 </div>
                             
-                </div>
-                    <div className='border-b border-gray-700'>
+            </div>
+                    <div className='border-b border-gray-700 '>
                         <input 
                             type="text" 
                             name="title" value={note.title} 
@@ -310,6 +312,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         </div>
                         
                     </div>)}
+                    </div>
                     <Navigation/>
         </form>
     )

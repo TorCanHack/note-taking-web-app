@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchServices } from "./Api";
-
+import ReactLoading from "react-loading";
 import CreateNote from "./CreateNote";
 import Navigation from "../shared/Navigation";
 import EditNote from "./EditNote";
@@ -25,8 +25,8 @@ const Notes = ({create, setCreate}) => {
 
     //note id state to help with seleecting note to edit
     const [noteId, setNoteId] = useState(null);
-
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleNoteClick = (note_Id) => {
         
@@ -41,13 +41,14 @@ const Notes = ({create, setCreate}) => {
     const getNotes = async () => {
         
         try {
+            setIsLoading(true);
             const data = await fetchServices.fetchNotes();
-            console.log("Fetched notes:", data); 
-            
             
             setNotes(data)
         } catch (error) {
             setError(error.message)
+        } finally {
+            setIsLoading(false)
         }
 
     }
@@ -56,16 +57,19 @@ const Notes = ({create, setCreate}) => {
    }, [noteId])
 
     return (
-        <section className="w-375 largePhone:w-410 bg-white rounded-t-lg pt-3 px-4  ">
+        <section className="w-375 largePhone:w-410 bg-white rounded-t-lg pt-3 px-4 md:w-768  ">
+            
             { !create ? <div> <article className="min-h-620 mb-3 "> <h1 className="font-bold text-2xl mb-3 ">All Notes</h1>
 
-     
+            
             <div>
                 {notes.length > 0 ? 
 
                 notes.map(note => (
+                   
                     
                 <div key={note._id} className="border-b border-gray-400 pb-3 my-3">
+                    
                     
                     <h2 className="font-semibold text-base mb-3">
                         <button onClick={() => handleNoteClick(note._id)}>{note.title}</button>
@@ -86,6 +90,14 @@ const Notes = ({create, setCreate}) => {
                 ))
 
                 : <p className="bg-gray-200 rounded-lg text-sm py-1 px-3">You don&apos;t have any notes yet. Start a new note to capture your thoughts and ideas.</p>}
+                {isLoading && <div className="block mx-auto  w-20">
+                        <ReactLoading 
+                            type="bars" 
+                            color="blue" 
+                            height={50} 
+                            width={50} 
+                        />
+                        </div>}
 
             </div></article>
                         

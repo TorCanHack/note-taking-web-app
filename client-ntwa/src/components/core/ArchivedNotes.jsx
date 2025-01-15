@@ -3,6 +3,7 @@ import { fetchServices } from "./Api";
 import Navigation from "../shared/Navigation";
 import PlusButton from "../shared/PlusButton";
 import EditArchivedNote from "./EditArchivedNote";
+import ReactLoading from "react-loading";
 
 const ArchivedNotes = ( {setCreate} ) => {
 
@@ -10,6 +11,7 @@ const ArchivedNotes = ( {setCreate} ) => {
 
     const [archivedNote, setArchivedNote] = useState([])
     const [archivedNoteId, setArchivedNoteId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false)
     
     
     const [error, setError] = useState('')
@@ -18,14 +20,15 @@ const ArchivedNotes = ( {setCreate} ) => {
         const getArchivedNotes = async () => {
 
             try {
+                setIsLoading(true)
                 const data = await fetchServices.fetchArchivedNotes()
-                console.log("Fetched notes:", data); 
-
                 
                 setArchivedNote(data)
 
             } catch (error) {
                 setError(error)
+            } finally {
+                setIsLoading(false)
             }
         }
 
@@ -42,9 +45,17 @@ const ArchivedNotes = ( {setCreate} ) => {
     return(
         <section className=" bg-white rounded-t-lg pt-3 px-4  w-375 largePhone:w-410 md:w-768 lg:w-950">
             {!archivedNoteId ? <div>
-            <div className="min-h-620">
+            <div className="min-h-620 md:min-h-1024">
                 <h1 className="font-bold text-2xl mb-3 ">Archived Notes</h1>
                 <p className="mb-3">All your archived notes are stored here. You can restore them or delete them anytime</p>
+                {isLoading && <div className="block mx-auto  w-20">
+                                    <ReactLoading 
+                                        type="bars" 
+                                        color="blue" 
+                                        height={50} 
+                                        width={50} 
+                                    />
+                                </div>}
                 {archivedNote.map(note => (
                     <div 
                         key={note._id}

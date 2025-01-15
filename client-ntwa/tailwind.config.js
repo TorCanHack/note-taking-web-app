@@ -22,7 +22,8 @@ export default {
         1000: '1000px'
       }, 
       minHeight: {
-        620: '620px'
+        620: '620px',
+        1024: '1024px'
       },
       inset: {
         81: '370px',
@@ -42,6 +43,8 @@ export default {
         410: '410px',
         522: '522px',
         540: '540px',
+        768: '768px',
+        
         
         
       }

@@ -6,6 +6,7 @@ import arrow_left from '../../assets/images/icon-arrow-left.svg'
 import { useState, useEffect } from 'react'
 import { fetchServices, postServices } from './Api'
 import { Navigate, useNavigate } from 'react-router-dom'
+import Navigation from '../shared/Navigation'
 
 
 const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived, setFreshlyArchived }) => {
@@ -89,6 +90,7 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived,
 
     return(
         <form onSubmit={handleFormSubmission}>
+            <div className='min-h-620 md:min-h-1024'>
             <div className='border-b border-black flex flex-row justify-between py-2'>
                 <button className='flex flex-row items-center  w-28 text-sm text-gray-600' onClick={handleBackButton}>
                     <img src={arrow_left} alt="arrow icon" className='w-4 h-4'/>
@@ -144,6 +146,8 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived,
             <textarea name='content' value={archivedNote.content} onChange={(e) => setArchivedNote({...archivedNote, content: e.target.value})} placeholder='Start your typing here...' className="text-sm resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3"></textarea>
 
             {freshlyArchived && <p>Note Archived</p>}
+            </div>
+            <Navigation/>
         </form>
     )
 

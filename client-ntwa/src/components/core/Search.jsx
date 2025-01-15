@@ -52,7 +52,7 @@ const Search = ({setCreate}) => {
 
     return (
         <section className="w-375 bg-white rounded-t-lg pt-3 px-4 border border-black md:w-768 lg:w-950 ">
-            <div className='min-h-620'>
+            <div className='min-h-620 md:min-h-1024'>
                 <h1 className="font-bold text-2xl mb-3 ">Search</h1>
                 <input 
                     name='search' 

@@ -75,7 +75,7 @@ const Tags = ({setCreate}) => {
     return (
         <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950 ">
             {!selectedTag ? 
-            <div className="min-h-620"> 
+            <div className="min-h-620 md:min-h-1024"> 
                 <h1 className="font-semibold text-2xl mb-5">Tags</h1>
                 {isLoading && <div className="block mx-auto  w-20">
                     <ReactLoading 

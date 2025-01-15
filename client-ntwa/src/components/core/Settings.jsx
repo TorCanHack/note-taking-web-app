@@ -30,7 +30,7 @@ const Settings = ({setCreate}) => {
     }
     return (
         <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950  "> { !isModalOpen ?
-            <div className='flex flex-col min-h-620'>
+            <div className='flex flex-col min-h-620 md:min-h-1024'>
                 <h1 className='font-bold text-2xl mb-7'>Settings</h1>
 
                 <button className='flex flex-row justify-start items-center text-sm mb-5'onClick={() => (setIsModalOpen(true), setIsThemeModalOpen(true))}>
@@ -49,7 +49,7 @@ const Settings = ({setCreate}) => {
                 </button>
                 <button className='flex flex-row justify-start items-center text-sm mb-5 ' onClick={handleLogout}>
                     <img src={logout_icon} alt="logout icon" className='mr-2'/>
-                    Lougout
+                    Logout
                 </button>
 
             </div>
