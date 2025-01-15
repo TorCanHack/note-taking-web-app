@@ -143,7 +143,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
             
         >
             <div className="block min-h-620 md:min-h-1024 ">
-            {(deleteModal || archiveModal) && (<div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20 "></div>)}
+            {(deleteModal || archiveModal) && (<div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20  md:h-1050"></div>)}
             <div className='border-b border-black flex flex-row justify-between py-2 '>
                 <button 
                     className='flex flex-row items-center  w-28 text-sm text-gray-600' 
@@ -246,7 +246,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         className="text-sm resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3"
                     />
 
-                    {deleteModal  && (<div className="relative bottom-97 w-343 h-48 p-4 rounded-lg border border-black z-30 bg-white">
+                    {deleteModal  && (<div className="relative bottom-97 w-343 h-48 p-4 rounded-lg border border-black z-30 bg-white mx-auto">
                         <div className="flex flex-row justify-between items-center border-b border-black">
                             <div className="flex flex-col justify-center items-center bg-gray-200 h-10 w-10 rounded-xl">
                                 <img
@@ -280,7 +280,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                         
 
                     </div>)}
-                    {archiveModal && (<div className="relative bottom-97 w-343 h-auto p-4 rounded-lg border border-black z-30 bg-white">
+                    {archiveModal && (<div className="relative bottom-97 w-343 h-auto p-4 rounded-lg border border-black z-30 bg-white mx-auto">
                         <div className="flex flex-row justify-between items-center border-b border-black">
                             <div className="flex flex-col justify-center items-center bg-gray-200 h-10 w-10 rounded-xl">
                                 <img

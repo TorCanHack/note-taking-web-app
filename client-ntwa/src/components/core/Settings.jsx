@@ -33,17 +33,17 @@ const Settings = ({setCreate}) => {
             <div className='flex flex-col min-h-620 md:min-h-1024'>
                 <h1 className='font-bold text-2xl mb-7'>Settings</h1>
 
-                <button className='flex flex-row justify-start items-center text-sm mb-5'onClick={() => (setIsModalOpen(true), setIsThemeModalOpen(true))}>
+                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8'onClick={() => (setIsModalOpen(true), setIsThemeModalOpen(true))}>
                     <img src={sun_icon} alt="sun icon"  className='mr-2'/>
                     Color Theme
                 </button>
 
-                <button className='flex flex-row justify-start items-center text-sm mb-5 'onClick={() => (setIsModalOpen(true), setIsFontModalOpen(true))} >
+                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8 'onClick={() => (setIsModalOpen(true), setIsFontModalOpen(true))} >
                     <img src={font_icon} alt="font icon" className='mr-2'/>
                     Font Theme
                 </button>
 
-                <button className='flex flex-row justify-start items-center text-sm mb-5 pb-4 border-b border-gray-400' onClick={() => (setIsModalOpen(true), setIsPasswordModalOpen(true))}>
+                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8 pb-4 border-b border-gray-400' onClick={() => (setIsModalOpen(true), setIsPasswordModalOpen(true))}>
                     <img src={lock_icon} alt="lock icon" className='mr-2'/>
                     Change Password
                 </button>
