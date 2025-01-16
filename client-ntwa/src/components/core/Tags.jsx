@@ -73,9 +73,9 @@ const Tags = ({setCreate}) => {
     }, [])
 
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950 ">
+        <section className=" bg-white rounded-t-lg pt-3 px-2   ">
             {!selectedTag ? 
-            <div className="min-h-620 md:min-h-1024"> 
+            <div className="sm:min-h-screen md:min-h-1024 lg:min-h-full"> 
                 <h1 className="font-semibold text-2xl mb-5">Tags</h1>
                 {isLoading && <div className="block mx-auto  w-20">
                     <ReactLoading 
@@ -89,7 +89,7 @@ const Tags = ({setCreate}) => {
                 {tags.map((tag) => (
                     <div 
                         key={tag}
-                        className="border-b border-gray-300 mb-3 pb-3"
+                        className="border-b border-gray-300 mb-3 pb-3 "
                     >
                         <ul>
                             <li>
