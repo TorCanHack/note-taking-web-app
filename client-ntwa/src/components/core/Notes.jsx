@@ -10,6 +10,9 @@ import archive_icon from '../../assets/images/icon-archive.svg'
 import logo from '../../assets/images/logo.svg'
 import plus from '../../assets/images/icon-plus.svg'
 import ArchivedNotes from "./ArchivedNotes";
+import ListOfTags from "./ListOfTags";
+import SelectedTagList from "./SelectedTagList";
+import { useTag } from "../shared/useTag";
 
 
 const Notes = ({create, setCreate}) => {
@@ -31,6 +34,7 @@ const Notes = ({create, setCreate}) => {
     const [noteId, setNoteId] = useState(null);
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showAllArchived, setShowAllArchived] = useState(false);
+    const {selectedTag, setSelectedTag} = useTag();
     
 
     const handleNotesDisplay = () => {
@@ -122,7 +126,7 @@ const Notes = ({create, setCreate}) => {
                     
                 />
                 
-                <Tags/>
+                <ListOfTags/>
 
             </section>
 
@@ -147,6 +151,12 @@ const Notes = ({create, setCreate}) => {
                 {showAllArchived && <div>
                     <ArchivedNotes/>
                 </div>}
+
+                <div>
+                    {selectedTag && <SelectedTagList/>}
+                    
+
+                </div>
                 
 
             </section>
