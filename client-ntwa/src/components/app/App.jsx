@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
     <main className='flex flex-col justify-center items-center w-375 largePhone:w-410  '>
       <div>
         {isAuthenticated && <section className='bg-gray-200 '>
-        <div className='h-14 flex justify-between items-center px-4'>
+        <div className='h-14 flex justify-between items-center px-4 lg:hidden'>
             <img 
               src={logo} 
               alt='logo' 

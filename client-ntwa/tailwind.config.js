@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import scrollbar from 'tailwind-scrollbar';
+
 export default { 
   content: [
     "./index.html",
@@ -17,6 +19,7 @@ export default {
         52: '52px',
         72: '72px',
         511: '511px',
+        900: '900px',
         950:  '950px',
         970: '1020px',
         1000: '1000px',
@@ -46,15 +49,25 @@ export default {
         375: '375px',
         410: '410px',
         522: '522px',
+        592: '605px',
         540: '540px',
         768: '768px',
         1440: '1440px'
         
         
         
-      }
+      },
+      scrollbar: {
+        thin: '1px', // Customize your thin scrollbar thickness here
+        extraThin: '1px', // Add a custom thinner scrollbar
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    scrollbar,
+  ],
+  variants: {
+    scrollbar: ['rounded']
+  }
 }
 

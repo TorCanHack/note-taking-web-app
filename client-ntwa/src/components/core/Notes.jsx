@@ -7,6 +7,10 @@ import chevron_right from '../../assets/images/icon-chevron-right.svg'
 import ListOfNotes from "../shared/ListOfNotes";
 import Tags from "./Tags";
 import archive_icon from '../../assets/images/icon-archive.svg'
+import logo from '../../assets/images/logo.svg'
+import plus from '../../assets/images/icon-plus.svg'
+import ArchivedNotes from "./ArchivedNotes";
+
 
 const Notes = ({create, setCreate}) => {
 
@@ -23,12 +27,25 @@ const Notes = ({create, setCreate}) => {
     // state for the list of notes
     const [notes, setNotes] = useState([]);
     
-   
-
     //note id state to help with seleecting note to edit
     const [noteId, setNoteId] = useState(null);
+    const [showAllNotes, setShowAllNotes] = useState(false);
+    const [showAllArchived, setShowAllArchived] = useState(false);
     
 
+    const handleNotesDisplay = () => {
+        setShowAllNotes(true)
+        setShowAllArchived(false)
+    }
+
+    const handleArchiveNotesDisplay = () => {
+        setShowAllArchived(true)
+        setShowAllNotes(false)
+    }
+
+    const handleCreateButton = () => {
+        setCreate(true);
+    }
     
     return (
         <>
@@ -61,21 +78,36 @@ const Notes = ({create, setCreate}) => {
             }
         </section>
 
-        <section className="hidden lg:flex lg:flex-row lg:bg-white">
+        <div className="hidden lg:flex lg:flex-col ">
+            <header className="h-14 flex justify-between items-center px-4 ">
+                <img 
+                    src={logo} 
+                    alt="logo" 
+                    className="mr-56 "    
+                />
+                <h1 className="text-2xl font-bold lg:mr-auto">
+                    {showAllNotes ? "All Notes" : "Archived"}
+                </h1>
+
+            </header>
+        <section className="hidden lg:flex lg:flex-row lg:bg-white lg:w-1440">
+            
             <section className="lg:w-272 lg:h-screen lg:mr-auto lg:border lg:border-black lg:px-2 ">
                 <Button1
                     image={<img 
                         src={home_icon} 
                         alt="home_icon" 
                         className="h-5 w-5 mr-2"
+                        
                     />}
                     text='All Notes'
                     image2={<img 
                         src={chevron_right} 
                         alt="chevron icon" 
-                        className="hidden active:flex"
+                        className={`${showAllNotes? "flex ml-auto" : "hidden"}`}
                     />}
                     className="border border-black"
+                    buttonFunc={handleNotesDisplay}
                     
                 />
                 <Button1
@@ -84,8 +116,9 @@ const Notes = ({create, setCreate}) => {
                         alt="archive icon" 
                         className="h-5 w-5 mr-2"/>}
                     text='Archive'
-                    image2={<img src={chevron_right} alt="chevron icon" className="hidden active:flex"/>}
-                    className=""
+                    image2={<img src={chevron_right} alt="chevron icon" className={`${showAllArchived? "flex ml-auto" : "hidden"}`}/>}
+                    
+                    buttonFunc={handleArchiveNotesDisplay}
                     
                 />
                 
@@ -93,7 +126,48 @@ const Notes = ({create, setCreate}) => {
 
             </section>
 
+            <section className="">
+                {showAllNotes && <div className="lg:w-72 lg:p-5 border border-black">
+                    <Button1
+                        image={<img src={plus} alt="plus logo"/>}
+                        text="Create Note"
+                        className="bg-blue-700 text-white rounded-xl mb-3"
+                        buttonFunc={handleCreateButton}
+                    />
+                        
+                    <ListOfNotes 
+                        notes={notes}
+                        setNotes={setNotes}
+                        noteId={noteId}
+                        setNoteId={setNoteId}
+                        setCreate={setCreate}
+                    />
+
+                </div>}
+                {showAllArchived && <div>
+                    <ArchivedNotes/>
+                </div>}
+                
+
+            </section>
+            <section className="lg:h-screen lg:w-592 border border-black ">
+                { (create && !noteId) && <CreateNote 
+                    notes={notes} 
+                    setNotes={setNotes} 
+                    currentNote={currentNote} 
+                    setCurrentNote={setCurrentNote} 
+                    setCreate={setCreate} onClose={() => setCreate(false)}
+                /> }
+
+            </section>
+
+            <section className="lg:w-272 lg:h-screen border border-black">
+                <p>juj</p>
+
+            </section>
+
         </section>
+        </div>
         </>
     )
 

@@ -42,8 +42,8 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
     return (
         <section>
             <div> 
-                <article className="min-h-620 mb-3 "> 
-                    <h1 className="font-bold text-2xl mb-3 ">
+                <article className="lg:min-h-620 lg:h-900 lg:max-h-[87.4vh] lg:overflow-y-auto  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg mb-3 "> 
+                    <h1 className="font-bold text-2xl mb-3 lg:hidden ">
                         All Notes
                     </h1>
 

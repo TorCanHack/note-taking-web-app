@@ -90,7 +90,7 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
     }
     
     return ( 
-        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 ' onSubmit={handleFormSubmission} >
+        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 lg:w-592 lg:pt-4 ' onSubmit={handleFormSubmission} >
             <div className='md:min-h-1024'>
             <div className='border-b border-black flex flex-row justify-between py-2'>
                 <button className='flex flex-row items-center  w-28 text-sm text-gray-600' onClick={handleBackButton}>
