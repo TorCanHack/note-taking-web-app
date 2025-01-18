@@ -7,9 +7,10 @@ import { useState, useEffect } from 'react'
 import { fetchServices, postServices } from './Api'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Navigation from '../shared/Navigation'
+import { useNote } from '../shared/useNote'
 
 
-const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived, setFreshlyArchived }) => {
+const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
 
     const navigate = useNavigate()
 
@@ -25,6 +26,7 @@ const EditArchivedNote = ({ archivedNoteId, setArchivedNoteId,  freshlyArchived,
     })
 
     const [error, setError] = useState({})
+    const { archivedNoteId, setArchivedNoteId} = useNote();
     
     useEffect(() => {
         const loadNote = async () => {

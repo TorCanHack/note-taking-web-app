@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { TagContext } from "./TagContext"
+import { NoteContext } from "./NoteContext"
 
 
-export const useTag = () => {
+export const useNote = () => {
 
-    const context = useContext(TagContext);
+    const context = useContext(NoteContext);
 
     if (context === undefined) {
         throw new Error("useTag must be used within a Tag provider")

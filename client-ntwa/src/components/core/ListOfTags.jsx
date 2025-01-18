@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import ReactLoading from 'react-loading'
 import { fetchServices } from './Api';
-import { useTag } from '../shared/useTag'
+import { useNote } from '../shared/useNote'
 import tag_icon from '../../assets/images/icon-tag.svg'
 
 
@@ -10,7 +10,7 @@ const ListOfTags = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [tags, setTags] = useState([]);
-    const {setSelectedTag} = useTag();
+    const {setSelectedTag} = useNote();
     
 
     const getTags = async () => {

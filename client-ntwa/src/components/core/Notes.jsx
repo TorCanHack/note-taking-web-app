@@ -4,15 +4,15 @@ import EditNote from "./EditNote";
 import { Button1 } from "../shared/Button";
 import home_icon from '../../assets/images/icon-home.svg'
 import chevron_right from '../../assets/images/icon-chevron-right.svg'
-import ListOfNotes from "../shared/ListOfNotes";
-import Tags from "./Tags";
+import ListOfNotes from "./ListOfNotes";
 import archive_icon from '../../assets/images/icon-archive.svg'
 import logo from '../../assets/images/logo.svg'
 import plus from '../../assets/images/icon-plus.svg'
-import ArchivedNotes from "./ArchivedNotes";
 import ListOfTags from "./ListOfTags";
 import SelectedTagList from "./SelectedTagList";
-import { useTag } from "../shared/useTag";
+import { useNote } from "../shared/useNote";
+import ListOfArchivedNotes from "./ListOfArchivedNotes";
+import EditArchivedNote from "./EditArchivedNote";
 
 
 const Notes = ({create, setCreate}) => {
@@ -34,17 +34,19 @@ const Notes = ({create, setCreate}) => {
     const [noteId, setNoteId] = useState(null);
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showAllArchived, setShowAllArchived] = useState(false);
-    const {selectedTag, setSelectedTag} = useTag();
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId} = useNote();
     
 
     const handleNotesDisplay = () => {
         setShowAllNotes(true)
         setShowAllArchived(false)
+        setSelectedTag(null)
     }
 
     const handleArchiveNotesDisplay = () => {
         setShowAllArchived(true)
         setShowAllNotes(false)
+        setSelectedTag(null)
     }
 
     const handleCreateButton = () => {
@@ -90,7 +92,7 @@ const Notes = ({create, setCreate}) => {
                     className="mr-56 "    
                 />
                 <h1 className="text-2xl font-bold lg:mr-auto">
-                    {showAllNotes ? "All Notes" : "Archived"}
+                    {showAllNotes ? "All Notes" : showAllArchived ? "Archived" : selectedTag ? <span className="text-gray-400">Notes Tagged: <span className="text-black">{selectedTag}</span></span> : "" }
                 </h1>
 
             </header>
@@ -110,7 +112,7 @@ const Notes = ({create, setCreate}) => {
                         alt="chevron icon" 
                         className={`${showAllNotes? "flex ml-auto" : "hidden"}`}
                     />}
-                    className="border border-black"
+                    className=""
                     buttonFunc={handleNotesDisplay}
                     
                 />
@@ -130,8 +132,8 @@ const Notes = ({create, setCreate}) => {
 
             </section>
 
-            <section className="">
-                {showAllNotes && <div className="lg:w-72 lg:p-5 border border-black">
+            <section className=" lg:min-h-full lg:max-h-screen lg:overflow-y-auto  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg lg:w-295">
+                {(showAllNotes && !selectedTag) && <div className=" lg:p-5 border border-black">
                     <Button1
                         image={<img src={plus} alt="plus logo"/>}
                         text="Create Note"
@@ -148,19 +150,25 @@ const Notes = ({create, setCreate}) => {
                     />
 
                 </div>}
-                {showAllArchived && <div>
-                    <ArchivedNotes/>
+                {(showAllArchived && !selectedTag) && <div className="lg:w-295 box-border border  border-black lg:p-5">
+                    <Button1
+                        image={<img src={plus} alt="plus logo"/>}
+                        text="Create Note"
+                        className="bg-blue-700 text-white rounded-xl mb-3"
+                        buttonFunc={handleCreateButton}
+                    />
+                    <ListOfArchivedNotes/>
                 </div>}
 
-                <div>
-                    {selectedTag && <SelectedTagList/>}
+                {selectedTag && <div>
+                    <SelectedTagList/>
                     
 
-                </div>
+                </div>}
                 
 
             </section>
-            <section className="lg:h-screen lg:w-592 border border-black ">
+            <section className="lg:h-screen lg:w-590 border border-black ">
                 { (create && !noteId) && <CreateNote 
                     notes={notes} 
                     setNotes={setNotes} 
@@ -168,6 +176,9 @@ const Notes = ({create, setCreate}) => {
                     setCurrentNote={setCurrentNote} 
                     setCreate={setCreate} onClose={() => setCreate(false)}
                 /> }
+
+                {tagNoteId && <EditNote noteId={tagNoteId} setNoteId={setTagNoteId}/> }
+                {archivedNoteId && <EditArchivedNote/>}
 
             </section>
 

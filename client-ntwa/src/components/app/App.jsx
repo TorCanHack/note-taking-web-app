@@ -12,7 +12,7 @@ import Search from '../core/Search';
 import Tags from '../core/Tags';
 import { ThemeProvider } from '../shared/ThemeProvider';
 import Settings from '../core/Settings';
-import {TagProvider} from '../shared/TagProvider';
+import {NoteProvider} from '../shared/NoteProvider';
 
 // protected Route component to handle authentication
 const ProtectedRoute = ({ children }) => {
@@ -79,17 +79,21 @@ function App() {
             {/*private route */}
             <Route path='/' element={
               <ProtectedRoute>
-                <TagProvider>
+                <NoteProvider>
                   <Notes create={create} setCreate={setCreate} />
 
-                </TagProvider>
+                </NoteProvider>
                 
               </ProtectedRoute>
             }/>
 
             <Route path='/archive' element={
               <ProtectedRoute>
-                <ArchivedNotes setCreate={setCreate} />
+                <NoteProvider>
+                  <ArchivedNotes setCreate={setCreate} />
+
+                </NoteProvider>
+                
               </ProtectedRoute>
             }/>
 
@@ -101,10 +105,10 @@ function App() {
 
             <Route path='/tags' element={
               <ProtectedRoute>
-                <TagProvider>
+                <NoteProvider>
                   <Tags setCreate={setCreate}/>
 
-                </TagProvider>
+                </NoteProvider>
                 
               </ProtectedRoute>
             }/>

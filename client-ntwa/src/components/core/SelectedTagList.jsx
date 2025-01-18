@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import ReactLoading from 'react-loading';
 import { fetchServices } from './Api';
-import {useTag} from '../shared/useTag';
+import {useNote} from '../shared/useNote';
 import left_arrow_icon from "../../assets/images/icon-arrow-left.svg"
 
 const SelectedTagList = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const [noteId, setNoteId] = useState(null);
     const [tagNotes, setTagNotes] = useState([]);
-    const {selectedTag, setSelectedTag} = useTag();
+    const {selectedTag, setSelectedTag,  setTagNoteId, setShowTagNotes} = useNote();
     const [source, setSource] = useState(null);
 
     const handleBackToTags = () => {
@@ -19,8 +18,9 @@ const SelectedTagList = () => {
 
     const handleNoteClickInTags = (note_Id) => {
         
-        setNoteId(note_Id)
+        setTagNoteId(note_Id)
         setSource("tags")
+        setShowTagNotes(true)
 
     }
 
@@ -54,7 +54,7 @@ const SelectedTagList = () => {
                     />
                 </div>}
                 <button 
-                    className="flex flex-row items-center text-sm"
+                    className="flex flex-row items-center text-sm lg:hidden"
                     onClick={handleBackToTags}
                 >
                     <img 
@@ -65,7 +65,7 @@ const SelectedTagList = () => {
                     Go back
                 </button>
                 <div className="min-h-620 ">
-                    <h1 className="font-bold text-2xl mt-3 text-gray-500">Notes Tagged: <span className="text-black">{selectedTag}</span> </h1>
+                    <h1 className="font-bold text-2xl mt-3 text-gray-500 lg:hidden">Notes Tagged: <span className="text-black">{selectedTag}</span> </h1>
                     <p className="my-3">All notes with the &#34;{selectedTag}&#34; tag are shown here</p>
                     {tagNotes.map(note => (
                         <div 
