@@ -7,7 +7,8 @@ import left_arrow_icon from "../../assets/images/icon-arrow-left.svg"
 const SelectedTagList = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [tagNotes, setTagNotes] = useState([]);
-    const {selectedTag, setSelectedTag,  setTagNoteId, setShowTagNotes} = useNote();
+    const {states} = useNote();
+    const {selectedTag, setSelectedTag,  setTagNoteId, setShowTagNotes} = states;
     const [source, setSource] = useState(null);
 
     const handleBackToTags = () => {

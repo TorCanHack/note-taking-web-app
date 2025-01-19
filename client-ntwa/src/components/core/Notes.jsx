@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateNote from "./CreateNote";
 import EditNote from "./EditNote";
 import { Button1 } from "../shared/Button";
 import home_icon from '../../assets/images/icon-home.svg'
+import home_icon_copy from '../../assets/images/icon-home copy.svg'
 import chevron_right from '../../assets/images/icon-chevron-right.svg'
 import ListOfNotes from "./ListOfNotes";
 import archive_icon from '../../assets/images/icon-archive.svg'
+import archive_icon_copy from '../../assets/images/icon-archive copy.svg'
 import logo from '../../assets/images/logo.svg'
 import plus from '../../assets/images/icon-plus.svg'
 import ListOfTags from "./ListOfTags";
@@ -34,7 +36,8 @@ const Notes = ({create, setCreate}) => {
     const [noteId, setNoteId] = useState(null);
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showAllArchived, setShowAllArchived] = useState(false);
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId} = useNote();
+    const {states} = useNote();
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId} = states;
     
 
     const handleNotesDisplay = () => {
@@ -52,6 +55,10 @@ const Notes = ({create, setCreate}) => {
     const handleCreateButton = () => {
         setCreate(true);
     }
+
+    useEffect(() => {
+        handleNotesDisplay()
+    }, [])
     
     return (
         <>
@@ -85,12 +92,16 @@ const Notes = ({create, setCreate}) => {
         </section>
 
         <div className="hidden lg:flex lg:flex-col ">
-            <header className="h-14 flex justify-between items-center px-4 ">
-                <img 
-                    src={logo} 
-                    alt="logo" 
-                    className="mr-56 "    
-                />
+            <header className="h-14 flex justify-between items-center px-4 border-b border-gray-200">
+                <div className="flex flex-col justify-center items-center border border-black  w-64 h-20">
+                    <img 
+                        src={logo} 
+                        alt="logo" 
+                        className="lg:mr-44 lg:border-r "    
+                    />
+
+                </div>
+                
                 <h1 className="text-2xl font-bold lg:mr-auto">
                     {showAllNotes ? "All Notes" : showAllArchived ? "Archived" : selectedTag ? <span className="text-gray-400">Notes Tagged: <span className="text-black">{selectedTag}</span></span> : "" }
                 </h1>
@@ -98,9 +109,16 @@ const Notes = ({create, setCreate}) => {
             </header>
         <section className="hidden lg:flex lg:flex-row lg:bg-white lg:w-1440">
             
-            <section className="lg:w-272 lg:h-screen lg:mr-auto lg:border lg:border-black lg:px-2 ">
+            <section className="lg:w-272 lg:h-screen lg:mr-auto lg:border-r lg:border-black lg:px-2 ">
                 <Button1
-                    image={<img 
+                    image={showAllNotes ? 
+                        <img 
+                            src={home_icon_copy} 
+                            alt="home icon"
+                            className="h-5 w-5 mr-2"
+                        /> 
+                        :
+                        <img 
                         src={home_icon} 
                         alt="home_icon" 
                         className="h-5 w-5 mr-2"
@@ -112,17 +130,25 @@ const Notes = ({create, setCreate}) => {
                         alt="chevron icon" 
                         className={`${showAllNotes? "flex ml-auto" : "hidden"}`}
                     />}
-                    className=""
+                    className={`${showAllNotes ? "bg-gray-200 rounded-xl" : ""} mt-4`}
                     buttonFunc={handleNotesDisplay}
                     
                 />
                 <Button1
-                    image={<img 
+                    image={showAllArchived ? 
+                        <img 
+                        src={archive_icon_copy} 
+                        alt="archive icon"
+                        className="h-5 w-5 mr-2"
+                    />
+                    :
+                    <img 
                         src={archive_icon} 
                         alt="archive icon" 
                         className="h-5 w-5 mr-2"/>}
                     text='Archive'
                     image2={<img src={chevron_right} alt="chevron icon" className={`${showAllArchived? "flex ml-auto" : "hidden"}`}/>}
+                    className={`${showAllArchived ? "bg-gray-200 rounded-xl" : ""} `}
                     
                     buttonFunc={handleArchiveNotesDisplay}
                     
@@ -133,7 +159,7 @@ const Notes = ({create, setCreate}) => {
             </section>
 
             <section className=" lg:min-h-full lg:max-h-screen lg:overflow-y-auto  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg lg:w-295">
-                {(showAllNotes && !selectedTag) && <div className=" lg:p-5 border border-black">
+                {(showAllNotes && !selectedTag) && <div className=" lg:p-5 border-r border-black">
                     <Button1
                         image={<img src={plus} alt="plus logo"/>}
                         text="Create Note"
@@ -168,17 +194,18 @@ const Notes = ({create, setCreate}) => {
                 
 
             </section>
-            <section className="lg:h-screen lg:w-590 border border-black ">
-                { (create && !noteId) && <CreateNote 
+            <section className="lg:h-screen lg:w-590  ">
+                { create && !noteId ? <CreateNote 
                     notes={notes} 
                     setNotes={setNotes} 
                     currentNote={currentNote} 
                     setCurrentNote={setCurrentNote} 
                     setCreate={setCreate} onClose={() => setCreate(false)}
-                /> }
+                /> 
+                : noteId && showAllNotes ?  <EditNote noteId={noteId} setNoteId={setNoteId}/>
 
-                {tagNoteId && <EditNote noteId={tagNoteId} setNoteId={setTagNoteId}/> }
-                {archivedNoteId && <EditArchivedNote/>}
+                : archivedNoteId && showAllArchived ?  <EditArchivedNote/> : tagNoteId ? <EditNote noteId={tagNoteId} setNoteId={setTagNoteId}/> : null }
+                
 
             </section>
 

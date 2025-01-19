@@ -42,7 +42,7 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
     return (
         <section>
             <div> 
-                <article className="lg:min-h-620  mb-3 "> 
+                <article className="min-h-620  mb-3 "> 
                     <h1 className="font-bold text-2xl mb-3 lg:hidden ">
                         All Notes
                     </h1>
@@ -52,7 +52,7 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
     
                         <div 
                             key={note._id} 
-                            className="border-b border-gray-400 pb-3 my-3"
+                            className={`border-b border-gray-400 pb-3 my-3 ${noteId === note._id ? "bg-gray-200" : ""}`}
                         >
     
     

@@ -7,7 +7,8 @@ const ListOfArchivedNotes = () => {
     const [archivedNote, setArchivedNote] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('')
-    const {archivedNoteId, setArchivedNoteId} = useNote();
+    const {states} = useNote()
+    const {archivedNoteId, setArchivedNoteId} = states;
 
     
 
@@ -33,7 +34,7 @@ const ListOfArchivedNotes = () => {
     const handleArchiveNoteClick = (note_Id) => {
         
         setArchivedNoteId(note_Id)
-        setShowMobileNotes(true)
+        
 
         
 

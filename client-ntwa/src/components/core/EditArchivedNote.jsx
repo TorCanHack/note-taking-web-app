@@ -26,7 +26,8 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
     })
 
     const [error, setError] = useState({})
-    const { archivedNoteId, setArchivedNoteId} = useNote();
+    const {states} = useNote()
+    const { archivedNoteId, setArchivedNoteId} = states;
     
     useEffect(() => {
         const loadNote = async () => {
@@ -91,9 +92,9 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
     }
 
     return(
-        <form onSubmit={handleFormSubmission}>
+        <form onSubmit={handleFormSubmission} className='p-4'>
             <div className='min-h-620 md:min-h-1024'>
-            <div className='border-b border-black flex flex-row justify-between py-2'>
+            <div className='border-b border-black flex flex-row justify-between py-2 lg:hidden'>
                 <button className='flex flex-row items-center  w-28 text-sm text-gray-600' onClick={handleBackButton}>
                     <img src={arrow_left} alt="arrow icon" className='w-4 h-4'/>
                     Go back
