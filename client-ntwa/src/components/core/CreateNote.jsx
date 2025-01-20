@@ -4,6 +4,7 @@ import tag_icon from '../../assets/images/icon-tag.svg'
 import clock_icon from '../../assets/images/icon-clock.svg'
 import arrow_left from '../../assets/images/icon-arrow-left.svg'
 import Navigation from '../shared/Navigation';
+import { CancelBtn, SaveBtn } from '../shared/NoteComponents';
 
 const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, onClose}) => {
 
@@ -90,18 +91,18 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
     }
     
     return ( 
-        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 lg:w-592 lg:pt-4 ' onSubmit={handleFormSubmission} >
-            <div className='md:min-h-1024'>
-            <div className='border-b border-black flex flex-row justify-between py-2'>
+        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 lg:w-590 lg:pt-4 ' onSubmit={handleFormSubmission} >
+            <div className='md:min-h-1024 lg:min-h-620 lg:max-h-screen lg:p-5'>
+            <div className='border-b border-black flex flex-row justify-between py-2 lg:hidden'>
                 <button className='flex flex-row items-center  w-28 text-sm text-gray-600' onClick={handleBackButton}>
                     <img src={arrow_left} alt="arrow icon" className='w-4 h-4'/>
                     Go back
                 </button>
 
-                <div className='flex justify-between  w-32'>
+                <div className='flex justify-between w-32 '>
                     
-                    <button className='text-sm text-gray-600'>Cancel</button>
-                    <button type='submit' className='text-blue-400 text-sm'>Save Note</button>
+                    <CancelBtn/>
+                    <SaveBtn/>
                 </div>
                 
             </div>
@@ -133,7 +134,18 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
                 </div> 
 
             </div>
-            <textarea name='content' value={currentNote.content} onChange={handleInputChange} placeholder='Start your typing here...' className={errors.content ? 'border-red-600' : ' resize-none h-511 w-full placeholder:text-xs placeholder:text-black mt-3' }></textarea>
+            <textarea 
+                name='content' 
+                value={currentNote.content} 
+                onChange={handleInputChange} 
+                placeholder='Start your typing here...' 
+                className={errors.content ? 'border-red-600' : ' resize-none h-511 lg:h-96 w-full placeholder:text-xs placeholder:text-black mt-3' }
+            />
+            <div className='hidden lg:flex border-t border-gray-200 pt-6 translate-y-full '>
+                <SaveBtn/>
+                <CancelBtn/>
+            </div>
+            
             <p>{errors.content}</p>
             </div>
             <Navigation/>

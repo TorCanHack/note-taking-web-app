@@ -21,8 +21,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     
     
     const [archivedNoteId, setArchivedNoteId] = useState(null);
-    const {deleteModal, setDeleteModal, archiveModal, setArchiveModal, showArchivedNote,
-        setShowArchivedNote, note, setNote} = states;
+    const {deleteModal, archiveModal, showArchivedNote, note, setNote} = states;
     const [error, setError] = useState('')
 
     
@@ -74,6 +73,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     return (
         <form 
             onSubmit={handleFormSubmission}
+            id="note"
             
             
         >

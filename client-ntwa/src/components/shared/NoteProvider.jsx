@@ -12,6 +12,9 @@ export const NoteProvider = ({children}) => {
         lastEdited: Date.now()
 
     })
+
+    const [error, setError] = useState('')
+    const [noteId, setNoteId] = useState(null)
     const [selectedTag, setSelectedTag] = useState(null)
     const [tagNoteId, setTagNoteId] = useState(null);
     const [showTagNotes, setShowTagNotes] = useState(false)
@@ -20,6 +23,7 @@ export const NoteProvider = ({children}) => {
     const [archiveModal, setArchiveModal] = useState(false);
     const [freshlyArchived, setFreshlyArchived] = useState(false)
     const [showArchivedNote, setShowArchivedNote] = useState(false)
+    const [showAllNotes, setShowAllNotes] = useState(false);
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -46,8 +50,9 @@ export const NoteProvider = ({children}) => {
 
         try {
             await fetchServices.deleteNote(noteId)
-            onClose()
             setNoteId(null)
+            setDeleteModal(false)
+            setShowAllNotes(true)
             
         } catch (error) {
             setError(error)
@@ -91,6 +96,8 @@ export const NoteProvider = ({children}) => {
     const states = {
         note,
         setNote,
+        noteId,
+        setNoteId,
         selectedTag, 
         setSelectedTag, 
         tagNoteId, 
@@ -106,7 +113,11 @@ export const NoteProvider = ({children}) => {
         freshlyArchived,
         setFreshlyArchived,
         showArchivedNote,
-        setShowArchivedNote
+        setShowArchivedNote,
+        error,
+        setError,
+        showAllNotes, 
+        setShowAllNotes
 
     }
 

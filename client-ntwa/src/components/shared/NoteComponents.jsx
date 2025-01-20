@@ -71,17 +71,22 @@ export const BackBtn = () => {
 
 export const DeleteBtn = () => {
 
-    const {states} = useNote()
+    const {functions} = useNote()
 
-    const { activateDeleteModal} = states;
+    const { activateDeleteModal} = functions;
 
     return (
-        <button onClick={activateDeleteModal}>
+        <button 
+        
+            form='note'
+            onClick={activateDeleteModal} 
+            className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-60 lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4">
             <img 
                 src={delete_icon} 
                 alt="delete icon" 
-                className="w-4 h-4"
+                className="w-6 h-6"
             />
+            <span className='hidden lg:flex lg:ml-3'>Delete</span>
         </button>
     )
 }
@@ -118,6 +123,7 @@ export const DeleteModal = () => {
                 <button 
                     onClick={handleDeleteButton}
                     className="h-10 w-28 bg-red-600 rounded-xl ml-3"
+                    form='note'
                 >
                     Delete
                 </button>
@@ -130,7 +136,7 @@ export const DeleteModal = () => {
 export const LastEdited = () => {
     const {states} = useNote();
     const {note, setNote} = states;
-    
+
     return (
         <div className='flex flex-row  items-center mb-3'>
             <div className='flex flex-row  w-32 mr-2'>
@@ -172,20 +178,21 @@ export const NoteInput = () => {
 
 export const Overlay = () => {
     return (
-        <div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20  md:h-1050"></div>
+        <div className="absolute top-0 right-0 h-970 w-full bg-black opacity-50 z-20  md:h-1050 lg:min-h-1024 lg:max-h-screen "></div>
     )
 }
 
 export const ArchiveBtn = () => {
-    const {states} = useNote()
-    const { activateArchiveModal} = states;
+    const {functions} = useNote()
+    const { activateArchiveModal} = functions;
     return (
-        <button onClick={activateArchiveModal}>
+        <button form="note" onClick={activateArchiveModal} className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-60 lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4 lg:mb-4">
             <img 
                 src={archive_icon} 
                 alt="archive_icon" 
-                className="w-4 h-4"
+                className={`w-6 h-6`}
             />
+            <span className='hidden lg:flex lg:ml-3'>Archive Note</span>
         </button>
     )
 }
@@ -194,7 +201,7 @@ export const SaveBtn = () => {
     return (
         <button 
             type='submit' 
-            className='text-blue-400 text-sm'
+            className='text-blue-400 text-sm lg:w-24 lg:h-10 lg:bg-blue-600 lg:text-white lg:rounded-lg '
         >
             Save Note
         </button>
@@ -244,6 +251,8 @@ export const TitleInput = () => {
 
 export const CancelBtn = () => {
     return (
-        <button className='text-sm text-gray-600'>Cancel</button>
+        <button className='text-sm text-gray-600 lg:w-24 lg:h-10 lg:bg-gray-200 lg:text-black lg:rounded-lg lg:ml-4'>
+            Cancel
+        </button>
     )
 }
