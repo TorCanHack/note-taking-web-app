@@ -10,8 +10,9 @@ const ListOfTags = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [tags, setTags] = useState([]);
-    const {states} = useNote()
-    const {setSelectedTag} = states;
+    const {states, functions} = useNote()
+    const {setSelectedTag, setTagNoteId} = states;
+    const {getNotesByTag} = functions;
     
 
     const getTags = async () => {
@@ -37,6 +38,8 @@ const ListOfTags = () => {
 
     const handleTag = (tag) => {
         setSelectedTag(tag)
+        getNotesByTag(tag)
+
         
     }
 

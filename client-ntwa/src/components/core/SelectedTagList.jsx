@@ -5,10 +5,11 @@ import {useNote} from '../shared/useNote';
 import left_arrow_icon from "../../assets/images/icon-arrow-left.svg"
 
 const SelectedTagList = () => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [tagNotes, setTagNotes] = useState([]);
-    const {states} = useNote();
-    const {selectedTag, setSelectedTag,  setTagNoteId, setShowTagNotes} = states;
+   
+    
+    const {states, functions} = useNote();
+    const {selectedTag, setSelectedTag,  setTagNoteId, setShowTagNotes, isLoading, tagNotes, setTagNotes} = states;
+    const {getNotesByTag} = functions;
     const [source, setSource] = useState(null);
 
     const handleBackToTags = () => {
@@ -22,25 +23,14 @@ const SelectedTagList = () => {
         setTagNoteId(note_Id)
         setSource("tags")
         setShowTagNotes(true)
-
+        
     }
 
-    const getNotesByTag = async (tag) => {
     
-        try {
-            setIsLoading(true)
-            const data = await fetchServices.searchTags(tag)
-            setTagNotes(data)
-        } catch (error) {
-            setError(error)
-        } finally {
-            setIsLoading(false)
-        }
-    
-    }
 
     useState(() => {
         getNotesByTag(selectedTag);
+        
     }, [selectedTag])
 
     return (

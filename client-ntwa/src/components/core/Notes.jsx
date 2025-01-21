@@ -35,9 +35,9 @@ const Notes = ({create, setCreate}) => {
     
     //note id state to help with seleecting note to edit
     
-    const [showAllArchived, setShowAllArchived] = useState(false);
+    
     const {states} = useNote();
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes } = states;
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived,  } = states;
     
 
     const handleNotesDisplay = () => {
@@ -54,12 +54,15 @@ const Notes = ({create, setCreate}) => {
 
     const handleCreateButton = () => {
         setCreate(true);
+        
     }
 
     useEffect(() => {
         handleNotesDisplay()
         setCreate(false)
     }, [notes])
+
+    
     
     return (
         <>
@@ -174,7 +177,7 @@ const Notes = ({create, setCreate}) => {
 
                 <div className="flex flex-row ">
 
-                    <section className=" lg:min-h-full lg:max-h-screen lg:overflow-y-auto  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg lg:w-1/4">
+                    <section className=" lg:min-h-full lg:max-h-screen lg:overflow-y-auto lg:overflow-x-hidden  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg lg:w-1/4">
            
                         {(showAllNotes && !selectedTag) && <div className=" lg:p-5 border-r border-black">
                             <Button1
@@ -193,11 +196,11 @@ const Notes = ({create, setCreate}) => {
                             />
 
                         </div>}
-                        {(showAllArchived && !selectedTag) && <div className="lg:w-295 box-border border  border-black lg:p-5">
+                        {(showAllArchived && !selectedTag) && <div className="border-r border-black lg:p-5">
                             <Button1
                                 image={<img src={plus} alt="plus logo"/>}
                                 text="Create Note"
-                                className="bg-blue-700 text-white rounded-xl mb-3"
+                                className="bg-blue-700 text-white rounded-xl mb-3 w-full"
                                 buttonFunc={handleCreateButton}
                             />
                             <ListOfArchivedNotes/>
@@ -211,7 +214,7 @@ const Notes = ({create, setCreate}) => {
                     </section>
 
                     <section className="lg:h-screen lg:w-1/2  ">
-                        { create && !noteId ? 
+                        { create  ? 
                             <CreateNote 
                                 notes={notes} 
                                 setNotes={setNotes} 
@@ -237,8 +240,8 @@ const Notes = ({create, setCreate}) => {
 
                     </section>
 
-                    <section className=" flex flex-col items-center lg:w-1/4 lg:h-screen border border-black pt-4 ">
-                        {showAllNotes && (<div>
+                    <section className=" flex flex-col items-center lg:w-1/4 lg:h-screen border-l border-gray-200 pt-4 px-4  ">
+                        {showAllNotes && (<div className="flex flex-col w-full ">
 
                             <ArchiveBtn/>
                             <DeleteBtn/>

@@ -91,8 +91,8 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
     }
     
     return ( 
-        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 lg:w-590 lg:pt-4 ' onSubmit={handleFormSubmission} >
-            <div className='md:min-h-1024 lg:min-h-620 lg:max-h-screen lg:p-5'>
+        <form className='relative bottom-3 right-4 w-375 largePhone:w-410 rounded-t-md z-10  border border-transparent px-4 md:w-768 lg:w-full lg:pt-4 ' onSubmit={handleFormSubmission} >
+            <div className='md:min-h-1024 lg:min-h-full lg:max-h-screen lg:p-5 '>
             <div className='border-b border-black flex flex-row justify-between py-2 lg:hidden'>
                 <button className='flex flex-row items-center  w-28 text-sm text-gray-600' onClick={handleBackButton}>
                     <img src={arrow_left} alt="arrow icon" className='w-4 h-4'/>
@@ -108,7 +108,7 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
             </div>
 
             
-            <div className='border-b border-gray-700 '>
+            <div className='border-b border-gray-300'>
                 <input type="text" name="title" value={currentNote.title} onChange={handleInputChange} placeholder="Enter a title.." className={errors.title ? 'border-red-600' : ' placeholder:font-bold placeholder:text-black placeholder:text-xl my-3' }/>
 
                 <div className='flex flex-row justify-between items-center h-10 mb-3 md:justify-normal '>
@@ -139,9 +139,9 @@ const CreateNote = ({notes, setNotes, currentNote, setCurrentNote, setCreate, on
                 value={currentNote.content} 
                 onChange={handleInputChange} 
                 placeholder='Start your typing here...' 
-                className={errors.content ? 'border-red-600' : ' resize-none h-511 lg:h-96 w-full placeholder:text-xs placeholder:text-black mt-3' }
+                className={errors.content ? 'border-red-600' : ' resize-none h-511 lg:h-96 w-full placeholder:text-xs placeholder:text-black mt-3 border-b border-gray-300 ' }
             />
-            <div className='hidden lg:flex border-t border-gray-200 pt-6 translate-y-full '>
+            <div className='hidden lg:flex  pt-2 -mt-1  '>
                 <SaveBtn/>
                 <CancelBtn/>
             </div>

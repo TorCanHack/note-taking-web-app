@@ -42,7 +42,7 @@ const ListOfArchivedNotes = () => {
 
     return (
         
-        <div className="min-h-620 md:min-h-1024  mb-3  ">
+        <div className="min-h-620 md:min-h-1024 lg:min-h-620  mb-3  ">
                 <h1 className="font-bold text-2xl mb-3 lg:hidden">Archived Notes</h1>
                 <p className="mb-3 lg:text-sm">All your archived notes are stored here. You can restore them or delete them anytime</p>
                 {isLoading && <div className="block mx-auto  w-20">
@@ -61,10 +61,10 @@ const ListOfArchivedNotes = () => {
                         <h2 className="font-semibold text-base mb-2">
                             <button onClick={() =>handleArchiveNoteClick(note._id)}>
                                 {note.title}</button></h2>
-                        <ul className="flex flex-row mb-2">
+                        <ul className="flex flex-row flex-wrap mb-2 ">
 
                             {note.tags.map((tag, i) => (
-                                <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1">{tag}</li>
+                                <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1 mt-1">{tag}</li>
                             ))}
                         </ul>
                         <p className="text-xs text-gray-700 mb-2">{new Date(note.lastEdited).toLocaleDateString('en-GB', {

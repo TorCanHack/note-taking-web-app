@@ -1,8 +1,13 @@
 import { NoteContext } from "./NoteContext"
 import { useState } from "react"
 import { fetchServices, postServices } from "../core/Api"
+import { useNavigate } from "react-router-dom"
+
+
 
 export const NoteProvider = ({children}) => {
+
+    const navigate = useNavigate()
 
     const [note , setNote] = useState({
         title:'',
@@ -13,6 +18,9 @@ export const NoteProvider = ({children}) => {
 
     })
 
+     const [isLoading, setIsLoading] = useState(false)
+
+    const [tagNotes, setTagNotes] = useState([]);
     const [error, setError] = useState('')
     const [noteId, setNoteId] = useState(null)
     const [selectedTag, setSelectedTag] = useState(null)
@@ -24,6 +32,7 @@ export const NoteProvider = ({children}) => {
     const [freshlyArchived, setFreshlyArchived] = useState(false)
     const [showArchivedNote, setShowArchivedNote] = useState(false)
     const [showAllNotes, setShowAllNotes] = useState(false);
+    const [showAllArchived, setShowAllArchived] = useState(false);
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -74,6 +83,13 @@ export const NoteProvider = ({children}) => {
         }
     }
 
+    const handleCancelButton = (e) => {
+        e.preventDefault()
+        setShowAllArchived(false)
+        setShowAllNotes(true)
+        
+    }
+
     const handleBackButton = (e) => {
 
         e.preventDefault();
@@ -91,6 +107,33 @@ export const NoteProvider = ({children}) => {
         }
 
 
+    }
+
+    const handleRestoreButton = async (e) => {
+        e.preventDefault();
+    
+        try {
+            await postServices.RestoreNote(archivedNoteId, archivedNote)
+            navigate("/archive")
+            setArchivedNoteId(null)
+        } catch (error) {
+            setError(error)
+        }
+    }
+
+    const getNotesByTag = async (tag) => {
+    
+        try {
+            setIsLoading(true)
+            const data = await fetchServices.searchTags(tag)
+            setTagNotes(data)
+            
+        } catch (error) {
+            setError(error)
+        } finally {
+            setIsLoading(false)
+        }
+    
     }
 
     const states = {
@@ -117,7 +160,13 @@ export const NoteProvider = ({children}) => {
         error,
         setError,
         showAllNotes, 
-        setShowAllNotes
+        setShowAllNotes,
+        showAllArchived, 
+        setShowAllArchived,
+        tagNotes, 
+        setTagNotes,
+        isLoading, 
+        setIsLoading
 
     }
 
@@ -129,7 +178,10 @@ export const NoteProvider = ({children}) => {
         handleDeleteCancelButton,
         activateArchiveModal,
         activateDeleteModal,
-        handleBackButton
+        handleBackButton,
+        handleRestoreButton,
+        handleCancelButton,
+        getNotesByTag
     }
 
     return (

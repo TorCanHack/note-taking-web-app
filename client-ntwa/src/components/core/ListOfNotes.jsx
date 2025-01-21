@@ -52,7 +52,7 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
     
                         <div 
                             key={note._id} 
-                            className={`border-b border-gray-400 pb-3 my-3 ${noteId === note._id ? "bg-gray-200" : ""}`}
+                            className={`w-full border-b border-gray-400 pb-3 my-3 ${noteId === note._id ? "bg-gray-200" : ""}`}
                         >
     
     
@@ -60,9 +60,9 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
                                 <button onClick={() => handleNoteClick(note._id)}>{note.title}</button>
 
                     </h2>
-                    {note.tags.length > 0  && <ul className="flex flex-row mb-3">
+                    {note.tags.length > 0  && <ul className="flex flex-row flex-wrap mb-3  w-full ">
                         {note.tags.map((tag, i) => (
-                            <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1">{tag}</li>
+                            <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1 mt-1">{tag}</li>
                         ))}
                     </ul>}
     

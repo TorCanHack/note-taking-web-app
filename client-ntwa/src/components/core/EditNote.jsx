@@ -95,17 +95,31 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
                             
             </div>
                     <div className='border-b border-gray-700 '>
-                        <TitleInput/>
+                        <TitleInput 
+                            value={note.title} 
+                            onChangeFunc={(e) => setNote({...note, title: e.target.value})}
+                        />
 
-                        <TagInput/>
+                        <TagInput   
+                            value={note.tags} 
+                            onChangeFunc={(e) => setNote({...note, tags: e.target.value.split(",").map(tag => tag.trim())})}
+                        />
         
-                        <LastEdited/>
+                        <LastEdited lastEditedData={note.lastEdited}/>
         
                     </div>
-                   <NoteInput/>
+                   <NoteInput 
+                        value={note.content} 
+                        onChangeFunc={(e) => setNote({...note, content: e.target.value})}
+                    />
 
                     {deleteModal  && <DeleteModal/>}
                     {archiveModal && <ArchiveModal/>}
+                    
+                    <div className='hidden lg:flex  pt-2 -mt-1  '>
+                        <SaveBtn/>
+                        <CancelBtn/>
+                    </div>
                     </div>
                     <Navigation/>
         </form>

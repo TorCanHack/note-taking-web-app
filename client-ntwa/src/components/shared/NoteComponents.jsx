@@ -4,8 +4,22 @@ import arrow_left from '../../assets/images/icon-arrow-left.svg'
 import { useNote } from './useNote';
 import tag_icon from '../../assets/images/icon-tag.svg'
 import clock_icon from '../../assets/images/icon-clock.svg'
+import restore_icon from '../../assets/images/icon-restore.svg'
 
-
+export const ArchiveBtn = () => {
+    const {functions} = useNote()
+    const { activateArchiveModal} = functions;
+    return (
+        <button form="note" onClick={activateArchiveModal} className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-full lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4 lg:mb-4">
+            <img 
+                src={archive_icon} 
+                alt="archive_icon" 
+                className={`w-5 h-5`}
+            />
+            <span className='hidden lg:flex lg:ml-3 lg:text-sm'>Archive Note</span>
+        </button>
+    )
+}
 
 export const ArchiveModal = () => {
 
@@ -80,13 +94,13 @@ export const DeleteBtn = () => {
         
             form='note'
             onClick={activateDeleteModal} 
-            className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-60 lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4">
+            className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-full lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4">
             <img 
                 src={delete_icon} 
                 alt="delete icon" 
-                className="w-6 h-6"
+                className="w-5 h-5"
             />
-            <span className='hidden lg:flex lg:ml-3'>Delete</span>
+            <span className='hidden lg:flex lg:ml-3 lg:text-sm '>Delete</span>
         </button>
     )
 }
@@ -133,7 +147,7 @@ export const DeleteModal = () => {
     )
 } 
 
-export const LastEdited = () => {
+export const LastEdited = ({lastEditedData}) => {
     const {states} = useNote();
     const {note, setNote} = states;
 
@@ -150,7 +164,7 @@ export const LastEdited = () => {
             </div>
                 
             <p className='text-xs text-gray-600'>
-                {new Date(note.lastEdited).toLocaleDateString('en-GB', {
+                {new Date(lastEditedData).toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric'
@@ -162,16 +176,15 @@ export const LastEdited = () => {
     )
 } 
 
-export const NoteInput = () => {
-    const {states} = useNote();
-    const {note, setNote} = states;
+export const NoteInput = ({value, onChangeFunc}) => {
+    
     return (
         <textarea 
             name='content' 
-            value={note.content} 
-            onChange={(e) => setNote({...note, content: e.target.value})} 
+            value={value} 
+            onChange={onChangeFunc} 
             placeholder='Start your typing here...' 
-            className="text-sm resize-none h-511 lg:h-96 w-full placeholder:text-xs placeholder:text-black mt-3"
+            className="text-sm resize-none h-511 lg:h-96 w-full placeholder:text-xs placeholder:text-black mt-3 border-b border-gray-300"
         />
     )
 }
@@ -182,17 +195,18 @@ export const Overlay = () => {
     )
 }
 
-export const ArchiveBtn = () => {
-    const {functions} = useNote()
-    const { activateArchiveModal} = functions;
-    return (
-        <button form="note" onClick={activateArchiveModal} className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-60 lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4 lg:mb-4">
+export const RestoreBtn = () => {
+
+    const {functions} = useNote();
+    const{handleRestoreButton} = functions;
+
+    return(
+        <button onClick={handleRestoreButton}>
             <img 
-                src={archive_icon} 
+                src={restore_icon} 
                 alt="archive_icon" 
-                className={`w-6 h-6`}
+                className="w-4 h-4"
             />
-            <span className='hidden lg:flex lg:ml-3'>Archive Note</span>
         </button>
     )
 }
@@ -208,9 +222,8 @@ export const SaveBtn = () => {
     )
 }
 
-export const TagInput = () => {
-    const {states} = useNote();
-    const {note, setNote} = states;
+export const TagInput = ({value, onChangeFunc}) => {
+    
 
     return (
           <div className='flex flex-row justify-between items-center h-10 mb-3 md:justify-normal '>
@@ -227,31 +240,37 @@ export const TagInput = () => {
                 <textarea 
                     type="text" 
                     name="tag" 
-                    value={note.tags} 
-                    onChange={(e) => setNote({...note, tags: e.target.value.split(",").map(tag => tag.trim())})} placeholder='Add tags seprated by commas (e.g. Work, Planing)' 
+                    value={value} 
+                    onChange={onChangeFunc} 
+                    placeholder='Add tags seprated by commas (e.g. Work, Planing)' 
                     className='inline-block placeholder:text-xs h-8 resize-none'
                 />
             </div>
     )
 }
 
-export const TitleInput = () => {
-    const {states} = useNote();
-    const {note, setNote} = states;
+export const TitleInput = ({value, onChangeFunc}) => {
+    
     return (
-          <input 
-                type="text" 
-                name="title" value={note.title} 
-                onChange={(e) => setNote({...note, title: e.target.value})} 
-                placeholder="Enter a title.." 
-                className=" text-2xl font-bold placeholder:font-bold placeholder:text-black placeholder:text-xl my-3"
-            />
+        <input 
+            type="text" 
+            name="title" 
+            value={value} 
+            onChange={onChangeFunc} 
+            placeholder="Enter a title.." 
+            className=" text-2xl font-bold placeholder:font-bold placeholder:text-black placeholder:text-xl my-3"
+        />
     )
 }
 
 export const CancelBtn = () => {
+    const {functions} = useNote()
+
+    const {handleCancelButton} = functions
     return (
-        <button className='text-sm text-gray-600 lg:w-24 lg:h-10 lg:bg-gray-200 lg:text-black lg:rounded-lg lg:ml-4'>
+        <button 
+            className='text-sm text-gray-600 lg:w-24 lg:h-10 lg:bg-gray-200 lg:text-black lg:rounded-lg lg:ml-4' onClick={handleCancelButton}>
+            
             Cancel
         </button>
     )
