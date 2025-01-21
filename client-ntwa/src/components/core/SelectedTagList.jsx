@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
 import { fetchServices } from './Api';
 import {useNote} from '../shared/useNote';
@@ -28,7 +28,7 @@ const SelectedTagList = () => {
 
     
 
-    useState(() => {
+    useEffect(() => {
         getNotesByTag(selectedTag);
         
     }, [selectedTag])

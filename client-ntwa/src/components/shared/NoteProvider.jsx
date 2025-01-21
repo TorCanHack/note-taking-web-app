@@ -18,8 +18,17 @@ export const NoteProvider = ({children}) => {
 
     })
 
-     const [isLoading, setIsLoading] = useState(false)
+    const [archivedNote , setArchivedNote] = useState({
+        title:'',
+        content:'',
+        tags: [],
+        color: '#ffffff',
+        lastEdited: Date.now()
+        
+    })
 
+    const [notes, setNotes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
     const [tagNotes, setTagNotes] = useState([]);
     const [error, setError] = useState('')
     const [noteId, setNoteId] = useState(null)
@@ -33,6 +42,7 @@ export const NoteProvider = ({children}) => {
     const [showArchivedNote, setShowArchivedNote] = useState(false)
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showAllArchived, setShowAllArchived] = useState(false);
+    const [create, setCreate] = useState(false) 
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -77,16 +87,22 @@ export const NoteProvider = ({children}) => {
             setShowArchivedNote(true)
             setFreshlyArchived(true)
             setArchiveModal(false)
+            setNoteId(null)
+            setShowAllArchived(true)
+            
+            
             
         } catch (error) {
             setError(error)
-        }
+        } 
     }
 
     const handleCancelButton = (e) => {
         e.preventDefault()
-        setShowAllArchived(false)
-        setShowAllNotes(true)
+        setArchivedNoteId(null)
+        setNoteId(null)
+        setCreate(false)
+        setTagNoteId(null)
         
     }
 
@@ -113,9 +129,12 @@ export const NoteProvider = ({children}) => {
         e.preventDefault();
     
         try {
-            await postServices.RestoreNote(archivedNoteId, archivedNote)
-            navigate("/archive")
+            const restoredNote = await postServices.RestoreNote(archivedNoteId, archivedNote)
+            /*navigate("/archive")**/
+            setNoteId(restoredNote._id)
             setArchivedNoteId(null)
+            setShowAllNotes(true)
+            setShowAllArchived(false)
         } catch (error) {
             setError(error)
         }
@@ -166,7 +185,13 @@ export const NoteProvider = ({children}) => {
         tagNotes, 
         setTagNotes,
         isLoading, 
-        setIsLoading
+        setIsLoading,
+        archivedNote , 
+        setArchivedNote,
+        create, 
+        setCreate,
+        notes, 
+        setNotes
 
     }
 

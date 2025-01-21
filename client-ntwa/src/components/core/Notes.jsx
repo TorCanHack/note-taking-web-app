@@ -15,10 +15,10 @@ import SelectedTagList from "./SelectedTagList";
 import { useNote } from "../shared/useNote";
 import ListOfArchivedNotes from "./ListOfArchivedNotes";
 import EditArchivedNote from "./EditArchivedNote";
-import { ArchiveBtn, ArchiveModal, DeleteBtn } from "../shared/NoteComponents";
+import { ArchiveBtn, ArchiveModal, DeleteBtn, RestoreBtn } from "../shared/NoteComponents";
 
 
-const Notes = ({create, setCreate}) => {
+const Notes = () => {
 
        //state for the current note being created or edited
        const [currentNote, setCurrentNote] = useState({
@@ -31,13 +31,13 @@ const Notes = ({create, setCreate}) => {
     });
 
     // state for the list of notes
-    const [notes, setNotes] = useState([]);
+    
     
     //note id state to help with seleecting note to edit
     
     
     const {states} = useNote();
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived,  } = states;
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes  } = states;
     
 
     const handleNotesDisplay = () => {
@@ -58,9 +58,13 @@ const Notes = ({create, setCreate}) => {
     }
 
     useEffect(() => {
+
+        if(showAllArchived === true) {
+            setShowAllNotes(false)
+        } else {
         handleNotesDisplay()
-        setCreate(false)
-    }, [notes])
+        setCreate(false)}
+    }, [notes, noteId])
 
     
     
@@ -97,7 +101,7 @@ const Notes = ({create, setCreate}) => {
 
         <div className="hidden lg:flex lg:flex-row w-screen px-6">
 
-            <section className="lg:w-1/4 lg:min-h-screen flex flex-col lg:mr-auto lg:border-r lg:border-gray-200 lg:px-2 ">
+            <section className="lg:w-1/4 lg:min-h-screen lg:max-h-screen flex flex-col lg:mr-auto lg:border-r lg:border-gray-200 lg:px-2 ">
                 <div className="flex flex-col justify-center items-start h-20">
                     <img 
                         src={logo} 
@@ -108,7 +112,7 @@ const Notes = ({create, setCreate}) => {
                 </div>
 
                 <Button1
-                    image={showAllNotes ? 
+                    image={(showAllNotes && !selectedTag) ? 
                         <img 
                             src={home_icon_copy} 
                             alt="home icon"
@@ -125,14 +129,14 @@ const Notes = ({create, setCreate}) => {
                     image2={<img 
                         src={chevron_right} 
                         alt="chevron icon" 
-                        className={`${showAllNotes? "flex ml-auto" : "hidden"}`}
+                        className={`${(showAllNotes && !selectedTag) ? "flex ml-auto" : "hidden"}`}
                     />}
-                    className={`${showAllNotes ? "bg-gray-200 rounded-xl" : ""} mt-4 w-full`}
+                    className={`${(showAllNotes && !selectedTag) ? "bg-gray-200 rounded-xl" : ""} mt-4 w-full`}
                     buttonFunc={handleNotesDisplay}
                     
                 />
                 <Button1
-                    image={showAllArchived ? 
+                    image={(showAllArchived && !selectedTag) ? 
                         <img 
                         src={archive_icon_copy} 
                         alt="archive icon"
@@ -144,14 +148,17 @@ const Notes = ({create, setCreate}) => {
                         alt="archive icon" 
                         className="h-5 w-5 mr-2"/>}
                     text='Archive'
-                    image2={<img src={chevron_right} alt="chevron icon" className={`${showAllArchived? "flex ml-auto" : "hidden"}`}/>}
-                    className={`${showAllArchived ? "bg-gray-200 rounded-xl " : ""}  mt-2 w-full`}
+                    image2={<img src={chevron_right} alt="chevron icon" className={`${(showAllArchived && !selectedTag) ? "flex ml-auto" : "hidden"}`}/>}
+                    className={`${(showAllArchived && !selectedTag) ? "bg-gray-200 rounded-xl " : ""}  mt-2 w-full`}
                     
                     buttonFunc={handleArchiveNotesDisplay}
                     
                 />
+                <div className="lg:min-h-full lg:max-h-screen lg:overflow-y-auto lg:overflow-x-hidden  scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-rounded-lg">
+                    <ListOfTags/>
+
+                </div>
                 
-                <ListOfTags/>
 
             </section>
 
@@ -161,12 +168,12 @@ const Notes = ({create, setCreate}) => {
                 
                 
                     <h1 className="text-2xl font-bold lg:mr-auto">
-                        {showAllNotes ? "All Notes" : 
-                        showAllArchived ? "Archived" : 
+                        {(showAllNotes && !selectedTag) ? "All Notes" : 
+                        (showAllArchived && !selectedTag) ? "Archived" : 
                         selectedTag ? 
                             <span className="text-gray-400">
                                 Notes Tagged: 
-                                <span className="text-black">
+                                <span className="text-black ml-1">
                                     {selectedTag}
                                 </span>
                             </span> :
@@ -241,12 +248,19 @@ const Notes = ({create, setCreate}) => {
                     </section>
 
                     <section className=" flex flex-col items-center lg:w-1/4 lg:h-screen border-l border-gray-200 pt-4 px-4  ">
-                        {showAllNotes && (<div className="flex flex-col w-full ">
+                        {(showAllNotes && noteId) && (<div className="flex flex-col w-full ">
 
                             <ArchiveBtn/>
                             <DeleteBtn/>
 
                         </div>)}
+
+                        {(showAllArchived && archivedNoteId) && <div className="flex flex-col w-full ">
+
+                            <RestoreBtn/>
+                            <DeleteBtn/>
+                            
+                        </div>}
 
                 
 

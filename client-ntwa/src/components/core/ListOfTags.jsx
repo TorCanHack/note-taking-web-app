@@ -11,7 +11,7 @@ const ListOfTags = () => {
     const [error, setError] = useState('');
     const [tags, setTags] = useState([]);
     const {states, functions} = useNote()
-    const {setSelectedTag, setTagNoteId} = states;
+    const {setSelectedTag, setTagNoteId, notes} = states;
     const {getNotesByTag} = functions;
     
 
@@ -34,11 +34,11 @@ const ListOfTags = () => {
 
     useEffect(() => {
         getTags();
-    }, [])
+    }, [notes])
 
     const handleTag = (tag) => {
         setSelectedTag(tag)
-        getNotesByTag(tag)
+        
 
         
     }

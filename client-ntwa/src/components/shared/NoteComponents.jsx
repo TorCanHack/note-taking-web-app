@@ -201,20 +201,25 @@ export const RestoreBtn = () => {
     const{handleRestoreButton} = functions;
 
     return(
-        <button onClick={handleRestoreButton}>
+        <button onClick={handleRestoreButton} className= "lg:flex lg:flex-row lg:justify-start lg:items-center lg:w-full lg:h-11 lg:border lg:border-gray-300 lg:rounded-xl lg:font-bold lg:p-4 lg:mb-2">
             <img 
                 src={restore_icon} 
                 alt="archive_icon" 
-                className="w-4 h-4"
+                className="w-5 h-5"
+                
             />
+            <span className='hidden lg:flex lg:ml-3 lg:text-sm '>Restore</span>
         </button>
     )
 }
 
 export const SaveBtn = () => {
+    {/*const {functions} = useNote();
+    const {getTags} = functions;**/}
     return (
         <button 
             type='submit' 
+            /*onClick={getTags()}**/
             className='text-blue-400 text-sm lg:w-24 lg:h-10 lg:bg-blue-600 lg:text-white lg:rounded-lg '
         >
             Save Note

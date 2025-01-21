@@ -17,18 +17,11 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
 
     
 
-    const [archivedNote , setArchivedNote] = useState({
-        title:'',
-        content:'',
-        tags: [],
-        color: '#ffffff',
-        lastEdited: Date.now()
-    
-    })
+   
 
     const [error, setError] = useState({})
     const {states} = useNote()
-    const { archivedNoteId, setArchivedNoteId} = states;
+    const { archivedNoteId, setArchivedNoteId, archivedNote, setArchivedNote} = states;
     
     useEffect(() => {
         const loadNote = async () => {
