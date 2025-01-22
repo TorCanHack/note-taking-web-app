@@ -28,6 +28,7 @@ export const NoteProvider = ({children}) => {
     })
 
     const [notes, setNotes] = useState([]);
+    const [searchNotes, setSearchNotes] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
     const [tagNotes, setTagNotes] = useState([]);
     const [error, setError] = useState('')
@@ -43,6 +44,7 @@ export const NoteProvider = ({children}) => {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showAllArchived, setShowAllArchived] = useState(false);
     const [create, setCreate] = useState(false) 
+    const [searchInput, setSearchInput] = useState("");
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -155,6 +157,41 @@ export const NoteProvider = ({children}) => {
     
     }
 
+     //debounce function to prevent too many api calls
+     const debounce = (func, delay) => {
+        let timeoutId;
+        return(...args) => {
+            clearTimeout(timeoutId)
+            timeoutId = setTimeout(() => {
+                func.apply(null, args)
+            }, delay)
+        }
+    }
+
+    const getSearchNotes = async (searchItem) => {
+        try {
+            setIsLoading(true);
+            setError(null);
+            const data = await fetchServices.searchNotes(searchItem);
+            console.log("fetched data: ", data)
+            setSearchNotes(data)
+        } catch (error) {
+            setError(error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const debouncedGetNotes = debounce(getSearchNotes, 300)
+
+    const handleSearchInput = (e) => {
+        const {value} = e.target
+        setSearchInput(value)
+        debouncedGetNotes(value)
+        
+
+    }
+
     const states = {
         note,
         setNote,
@@ -191,7 +228,11 @@ export const NoteProvider = ({children}) => {
         create, 
         setCreate,
         notes, 
-        setNotes
+        setNotes,
+        searchInput, 
+        setSearchInput,
+        searchNotes, 
+        setSearchNotes
 
     }
 
@@ -206,7 +247,8 @@ export const NoteProvider = ({children}) => {
         handleBackButton,
         handleRestoreButton,
         handleCancelButton,
-        getNotesByTag
+        getNotesByTag,
+        handleSearchInput
     }
 
     return (

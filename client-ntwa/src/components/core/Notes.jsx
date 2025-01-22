@@ -15,7 +15,8 @@ import SelectedTagList from "./SelectedTagList";
 import { useNote } from "../shared/useNote";
 import ListOfArchivedNotes from "./ListOfArchivedNotes";
 import EditArchivedNote from "./EditArchivedNote";
-import { ArchiveBtn, ArchiveModal, DeleteBtn, RestoreBtn } from "../shared/NoteComponents";
+import { ArchiveBtn, ArchiveModal, DeleteBtn, RestoreBtn, SearchBar } from "../shared/NoteComponents";
+import SearchList from "./SearchList";
 
 
 const Notes = () => {
@@ -37,7 +38,7 @@ const Notes = () => {
     
     
     const {states} = useNote();
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes  } = states;
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes, searchInput } = states;
     
 
     const handleNotesDisplay = () => {
@@ -180,13 +181,15 @@ const Notes = () => {
                          "" }
                     </h1>
 
+                    <SearchBar/>
+
                 </header>
 
                 <div className="flex flex-row ">
 
                     <section className=" lg:min-h-full lg:max-h-screen lg:overflow-y-auto lg:overflow-x-hidden  scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-gray-100 scrollbar-rounded-lg lg:w-1/4">
            
-                        {(showAllNotes && !selectedTag) && <div className=" lg:p-5 border-r border-black">
+                        {(showAllNotes && (!selectedTag && !searchInput)) && <div className=" lg:p-5 border-r border-black">
                             <Button1
                                 image={<img src={plus} alt="plus logo"/>}
                                 text="Create Note"
@@ -203,7 +206,7 @@ const Notes = () => {
                             />
 
                         </div>}
-                        {(showAllArchived && !selectedTag) && <div className="border-r border-black lg:p-5">
+                        {(showAllArchived && (!searchInput && !selectedTag)) && <div className="border-r border-black lg:p-5">
                             <Button1
                                 image={<img src={plus} alt="plus logo"/>}
                                 text="Create Note"
@@ -215,6 +218,10 @@ const Notes = () => {
 
                         {selectedTag && <div>
                             <SelectedTagList/>
+                        </div>}
+
+                        {(searchInput && !selectedTag) && <div className="border-r border-black lg:p-5 min-h-screen">
+                            <SearchList/>
                         </div>}
                 
 

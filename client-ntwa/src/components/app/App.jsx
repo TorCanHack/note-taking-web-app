@@ -68,6 +68,7 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <NoteProvider>
         <Layout>
           <Routes>
             {/*public routes*/}
@@ -79,20 +80,20 @@ function App() {
             {/*private route */}
             <Route path='/' element={
               <ProtectedRoute>
-                <NoteProvider>
+                
                   <Notes create={create} setCreate={setCreate} />
 
-                </NoteProvider>
+                
                 
               </ProtectedRoute>
             }/>
 
             <Route path='/archive' element={
               <ProtectedRoute>
-                <NoteProvider>
-                  <ArchivedNotes setCreate={setCreate} />
+                
+                <ArchivedNotes setCreate={setCreate} />
 
-                </NoteProvider>
+              
                 
               </ProtectedRoute>
             }/>
@@ -105,10 +106,8 @@ function App() {
 
             <Route path='/tags' element={
               <ProtectedRoute>
-                <NoteProvider>
-                  <Tags setCreate={setCreate}/>
-
-                </NoteProvider>
+                
+                <Tags setCreate={setCreate}/>
                 
               </ProtectedRoute>
             }/>
@@ -123,7 +122,9 @@ function App() {
             <Route path='*' element={<Navigate to='/' replace/>}/>
           </Routes>
         </Layout>
+        </NoteProvider>
       </BrowserRouter>
+      
     </ThemeProvider>
   )
 }

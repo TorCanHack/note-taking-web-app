@@ -5,6 +5,7 @@ import { useNote } from './useNote';
 import tag_icon from '../../assets/images/icon-tag.svg'
 import clock_icon from '../../assets/images/icon-clock.svg'
 import restore_icon from '../../assets/images/icon-restore.svg'
+import search_icon from '../../assets/images/icon-search.svg'
 
 export const ArchiveBtn = () => {
     const {functions} = useNote()
@@ -224,6 +225,27 @@ export const SaveBtn = () => {
         >
             Save Note
         </button>
+    )
+}
+
+export const SearchBar = () => {
+    const {states, functions} = useNote();
+    const {searchInput} = states;
+    const {handleSearchInput} = functions;
+    return (
+        <div className=' lg:h-1/2 '>
+            <input 
+                name='search' 
+                value={searchInput} 
+                onChange={handleSearchInput} 
+                className='w-full h-52 border border-gray-500 rounded-lg bg-gray-200 px-10 lg:w-300 lg:h-full '
+            />
+            <img 
+                src={search_icon}
+                alt='search icon'
+                className='relative bottom-9 left-4 lg:bottom-7'
+            />
+        </div>
     )
 }
 
