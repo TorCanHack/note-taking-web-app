@@ -19,10 +19,10 @@ const FontTheme = ({setIsFontModalOpen, setIsModalOpen}) => {
     }
 
     return (
-        <section className=" min-h-620 ">
+        <section className=" min-h-620 lg:w-full lg:px-6 ">
             <button 
                 onClick={handleBackToSettings} 
-                className="flex flex-row text-sm items-center "
+                className="flex flex-row text-sm items-center lg:hidden "
             >
                 <img 
                     src={arrow_left_icon} 

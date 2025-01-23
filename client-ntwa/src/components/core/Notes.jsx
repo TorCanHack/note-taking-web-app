@@ -17,6 +17,11 @@ import ListOfArchivedNotes from "./ListOfArchivedNotes";
 import EditArchivedNote from "./EditArchivedNote";
 import { ArchiveBtn, ArchiveModal, DeleteBtn, RestoreBtn, SearchBar } from "../shared/NoteComponents";
 import SearchList from "./SearchList";
+import settings_icon from '../../assets/images/icon-settings.svg';
+import SettingsOptions from "./SettingsOptions";
+import ColorTheme from "./ColorTheme";
+import FontTheme from "./FontTheme";
+import ChangePassword from "../auth/ChangePassword";
 
 
 const Notes = () => {
@@ -38,7 +43,12 @@ const Notes = () => {
     
     
     const {states} = useNote();
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes, searchInput } = states;
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes, searchInput, searchNoteId, setSearchNoteId, showSettings, setShowSettings,     isThemeModalOpen, 
+        setIsThemeModalOpen,
+        isFontModalOpen, 
+        setIsFontModalOpen,
+        isPasswordModalOpen, 
+        setIsPasswordModalOpen } = states;
     
 
     const handleNotesDisplay = () => {
@@ -56,6 +66,12 @@ const Notes = () => {
     const handleCreateButton = () => {
         setCreate(true);
         
+    }
+
+    const handleShowSettings = () => {
+        setShowSettings(true);
+        setShowAllNotes(false);
+
     }
 
     useEffect(() => {
@@ -182,6 +198,9 @@ const Notes = () => {
                     </h1>
 
                     <SearchBar/>
+                    <button onClick={handleShowSettings}>
+                        <img src={settings_icon} alt="settings icon"/>
+                    </button>
 
                 </header>
 
@@ -223,6 +242,10 @@ const Notes = () => {
                         {(searchInput && !selectedTag) && <div className="border-r border-black lg:p-5 min-h-screen">
                             <SearchList/>
                         </div>}
+
+                        {(showSettings && (!selectedTag && !showAllNotes)) && <div className="border-r border-black lg:p-5 min-h-screen">
+                            <SettingsOptions/>
+                        </div>}
                 
 
                     </section>
@@ -249,7 +272,10 @@ const Notes = () => {
                                 noteId={tagNoteId} 
                                 setNoteId={setTagNoteId}
                             /> 
-                        : null }
+                        : searchNoteId? <EditNote noteId={searchNoteId} setNoteId={setSearchNoteId}/> 
+                        : isThemeModalOpen ? <ColorTheme/> 
+                        : isFontModalOpen ? <FontTheme/> 
+                        : isPasswordModalOpen ? <ChangePassword/> :  null }
                 
 
                     </section>

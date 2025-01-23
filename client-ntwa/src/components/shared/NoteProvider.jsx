@@ -33,6 +33,7 @@ export const NoteProvider = ({children}) => {
     const [tagNotes, setTagNotes] = useState([]);
     const [error, setError] = useState('')
     const [noteId, setNoteId] = useState(null)
+    const [searchNoteId, setSearchNoteId] = useState(null) 
     const [selectedTag, setSelectedTag] = useState(null)
     const [tagNoteId, setTagNoteId] = useState(null);
     const [showTagNotes, setShowTagNotes] = useState(false)
@@ -45,6 +46,11 @@ export const NoteProvider = ({children}) => {
     const [showAllArchived, setShowAllArchived] = useState(false);
     const [create, setCreate] = useState(false) 
     const [searchInput, setSearchInput] = useState("");
+    const [showSettings, setShowSettings] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+    const [isFontModalOpen, setIsFontModalOpen] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -192,6 +198,11 @@ export const NoteProvider = ({children}) => {
 
     }
 
+    const handleSearchClick = async (note_id) => {
+        setSearchNoteId(note_id);
+        
+    }
+
     const states = {
         note,
         setNote,
@@ -232,7 +243,19 @@ export const NoteProvider = ({children}) => {
         searchInput, 
         setSearchInput,
         searchNotes, 
-        setSearchNotes
+        setSearchNotes,
+        searchNoteId, 
+        setSearchNoteId,
+        showSettings, 
+        setShowSettings,
+        isModalOpen, 
+        setIsModalOpen,
+        isThemeModalOpen, 
+        setIsThemeModalOpen,
+        isFontModalOpen, 
+        setIsFontModalOpen,
+        isPasswordModalOpen, 
+        setIsPasswordModalOpen
 
     }
 
@@ -248,7 +271,8 @@ export const NoteProvider = ({children}) => {
         handleRestoreButton,
         handleCancelButton,
         getNotesByTag,
-        handleSearchInput
+        handleSearchInput,
+        handleSearchClick
     }
 
     return (

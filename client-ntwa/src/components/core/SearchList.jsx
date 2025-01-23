@@ -6,8 +6,9 @@ import ReactLoading from 'react-loading'
 const SearchList = () => {
 
 
-    const {states} = useNote();
+    const {states, functions} = useNote();
     const {searchNotes, searchInput, isLoading} = states;
+    const {handleSearchClick} = functions;
     
 
     return (
@@ -24,7 +25,7 @@ const SearchList = () => {
             (searchNotes.map(note => (
                 <div key={note._id} className="w-full border-b border-gray-400 pb-3 my-3">
                     <h2 className="font-semibold text-base mb-3">
-                        <button>{note.title}</button>
+                        <button onClick={() => handleSearchClick(note._id)}>{note.title}</button>
                     </h2>
                     <ul className="flex flex-row flex-wrap mb-3  w-full ">
                         {note.tags.map((tag, i) => (

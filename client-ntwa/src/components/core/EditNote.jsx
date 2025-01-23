@@ -38,7 +38,8 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
 
         loadNote();
     }, [noteId])
-
+    
+    
     const handleFormSubmission = async(e) => {
         e.preventDefault();
 
@@ -46,7 +47,8 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
         const updatedNote = {...note, lastEdited: Date.now() }
         try {
             await fetchServices.updateFetchedNote(noteId, updatedNote)
-            onClose();
+            setNoteId(null)
+            onClose(); 
         } catch (error) {
             setError(error)
         }

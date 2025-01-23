@@ -19,8 +19,8 @@ const ColorTheme = ({setIsThemeModalOpen, setIsModalOpen}) => {
     }
 
     return (
-        <section className=" min-h-620 ">
-            <button onClick={handleBackToSettings} className="flex flex-row items-center text-sm text-gray-700">
+        <section className=" min-h-620 lg:w-full lg:px-6  ">
+            <button onClick={handleBackToSettings} className="flex flex-row items-center text-sm text-gray-700 lg:hidden">
                 <img src={arrow_left_icon} alt='arrow icon' className='h-5 w-5'/>
                 Settings
             </button>

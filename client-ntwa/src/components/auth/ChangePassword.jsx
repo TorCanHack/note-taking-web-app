@@ -52,11 +52,11 @@ const ChangePassword = ({setIsPasswordModalOpen, setIsModalOpen}) => {
         }
     }
     return (
-        <section className=" min-h-620 ">
+        <section className=" min-h-620 lg:w-full lg:px-8 lg:py-4 ">
 
             <button 
                 onClick={handleBackToSettings} 
-                className="flex flex-row items-center text-sm "
+                className="flex flex-row items-center text-sm lg:hidden "
             >
                 <img 
                     src={arrow_left_icon} 

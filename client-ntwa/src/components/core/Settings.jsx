@@ -10,13 +10,14 @@ import { useNavigate } from 'react-router-dom';
 import PlusButton from '../shared/PlusButton';
 import Navigation from '../shared/Navigation'
 import PropTypes from 'prop-types';
+import SettingsOptions from './SettingsOptions';
 
 
 
 
 const Settings = ({setCreate}) => {
 
-    const navigate = useNavigate();
+   
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
     const [isFontModalOpen, setIsFontModalOpen] = useState(false);
@@ -24,37 +25,12 @@ const Settings = ({setCreate}) => {
 
    
     
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        navigate('/login')
-    }
+    
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-950  "> { !isModalOpen ?
-            <div className='flex flex-col min-h-620 md:min-h-1024'>
-                <h1 className='font-bold text-2xl mb-7'>Settings</h1>
+        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-full   "> { !isModalOpen ?
+            <SettingsOptions/>
 
-                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8'onClick={() => (setIsModalOpen(true), setIsThemeModalOpen(true))}>
-                    <img src={sun_icon} alt="sun icon"  className='mr-2'/>
-                    Color Theme
-                </button>
-
-                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8 'onClick={() => (setIsModalOpen(true), setIsFontModalOpen(true))} >
-                    <img src={font_icon} alt="font icon" className='mr-2'/>
-                    Font Theme
-                </button>
-
-                <button className='flex flex-row justify-start items-center text-sm mb-5 md:mb-8 pb-4 border-b border-gray-400' onClick={() => (setIsModalOpen(true), setIsPasswordModalOpen(true))}>
-                    <img src={lock_icon} alt="lock icon" className='mr-2'/>
-                    Change Password
-                </button>
-                <button className='flex flex-row justify-start items-center text-sm mb-5 ' onClick={handleLogout}>
-                    <img src={logout_icon} alt="logout icon" className='mr-2'/>
-                    Logout
-                </button>
-
-            </div>
-
-            : <div> 
+            : <div className='lg:hidden'> 
             {isThemeModalOpen && <ColorTheme setIsThemeModalOpen={setIsThemeModalOpen} setIsModalOpen={setIsModalOpen}/>}
             {isFontModalOpen && <FontTheme setIsFontModalOpen={setIsFontModalOpen} setIsModalOpen={setIsModalOpen}/>}
             {isPasswordModalOpen && <ChangePassword setIsPasswordModalOpen={setIsPasswordModalOpen} setIsModalOpen={setIsModalOpen}/>}
