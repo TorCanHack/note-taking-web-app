@@ -1,12 +1,14 @@
 const express = require("express")
 const path = require("path");
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 const { error } = require("console");
 const { type } = require("os");
 const Sentiment = require('sentiment');
+const { strict } = require("assert");
 const sentimentAnalyzer = new Sentiment()
 
 
@@ -15,6 +17,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser())
 
 mongoose.connect(process.env.MONGO_URI)
 
@@ -26,7 +29,7 @@ const Schema = mongoose.Schema
 
 // user schema
 const userSchema = Schema ({
-    email: {type: String, required: true, unique: true },
+    email: {type: String, required: true, unique: true, trim: true, lowercase: true },
     password: {type: String, required: true},
     resetToken: String,
     resetTokenExpiry: String
@@ -64,17 +67,32 @@ const Archive = mongoose.model("Archive", archiveSchema)
 
 // auth middleware to authenticate incoming request
 const auth = async (req, res, next) => {
+
     try {
-        const token = req.header('Authorization').replace('Bearer ', '')
+        const token = req.cookies.token;
+
+        if(!token) {
+            throw new Error('No authentication token found');
+        }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.user = await User.findById(decoded.id);
+        const user = await User.findById(decoded.id);
 
+        if(!user) {
+            throw new Error("User does not exist")
+        }
+
+        req.user = user;
         next()
 
     } catch(error){
-        res.status(401).json({error: "Authentication required"})
+
+        const errorMessage = error.name === 'JsonWebTokenError'
+            ? 'Invalid authentication toke'
+            : 'Authentication required';
+
+        res.status(401).json({error: errorMessage})
     }
 
 }
@@ -97,18 +115,24 @@ app.post("/api/signup", async (req, res) => {
         await user.save();
 
         const token = jwt.sign(
-            {
-                id: user._id,
-                email: user.email,
-                // Add any other non-sensitive user data
-            }, 
+            { id: user._id }, 
             process.env.JWT_SECRET,
             { expiresIn: '24h' }  // Add token expiration
         );
 
-        res.status(201).json({ token });
-        console.log('Request body:', req.body);
-        console.log('Found user:', user);
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: strict,
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        res.status(201).json({ 
+            message: 'Account created successfully',
+            userId: user._id
+
+         });
+        
 
     } catch (error) {
         console.error(error);  // Log full error for debugging
@@ -134,8 +158,20 @@ app.post("/api/login", async (req, res) => {
         if (!user || !await bcrypt.compare(password, user.password)) {
             throw new Error('Invalid credentials')
         }
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
-        res.send({ token })
+        const token = jwt.sign(
+            {id: user._id}, 
+            process.env.JWT_SECRET,
+            {expiresIn: '24h'}
+        );
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: strict,
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        res.send({ success: true })
     } catch (error) {
         console.log(error.message)
         res.status(400).send({error: error.message });
@@ -156,13 +192,17 @@ app.post("/api/forgot-password", async (req, res) => {
         const resetToken = jwt.sign(
             {userId: user._id},
             process.env.JWT_SECRET,
-            {expiresIn: '1h'}
+            {expiresIn: '15m'}
         )
 
-        //save reset token to user
-        user.resetToken = resetToken;
-        user.resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
-        await user.save();
+        res.cookie('resetToken', resetToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000 
+        });
+
+       
 
         // In a real application, you would send an email here with the reset link
         // For now, we'll just return the token in the response
@@ -170,6 +210,7 @@ app.post("/api/forgot-password", async (req, res) => {
             message: "password reset email sent",
             resetToken: resetToken
         })
+        
     } catch (error) {
         console.error("Password reset request error: ", error)
         res.status(500).send({error: "Error processing password reset request"})
@@ -179,7 +220,11 @@ app.post("/api/forgot-password", async (req, res) => {
 // route for changing password with token
 app.post("/api/password-reset", async (req, res) => {
     try {
-        const {token, newPassword} = req.body;
+        const {token} = req.cookies.resetToken;
+
+        if (!token) {
+            return res.status(401).send({error: "No reset token provided"})
+        }
 
         //verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -195,10 +240,16 @@ app.post("/api/password-reset", async (req, res) => {
             res.status(404).send({error: "Invalid or expired reset token"})
         }
 
+        const {newPassword} = req.body
+
         const hashedPassword = await bcrypt.hash(newPassword, 10)
         user.password = hashedPassword;
         user.resetToken = undefined;
         user.resetTokenExpiry = undefined;
+
+        await user.save();
+
+        res.clearCookie('resetToken')
 
         res.send({message: "Password succesfully reset"})
     } catch (error) {
@@ -433,6 +484,16 @@ app.delete("/api/notes/:_id", auth, async (req, res) => {
         const note = await Note.findOneAndDelete({_id: req.params._id, userId: req.user._id})
         if (!note) return res.status(404).send();
         res.send(note)
+    } catch(error) {
+        res.status(500).send(error)
+    }
+})
+
+app.delete("/api/notes/archive/:_id", auth, async (req, res) => {
+    try {
+        const archivedNote = await Archive.findOneAndDelete({_id: req.params._id, userId: req.user._id})
+        if (!archivedNote) return res.status(404).send();
+        res.send(archivedNote)
     } catch(error) {
         res.status(500).send(error)
     }
