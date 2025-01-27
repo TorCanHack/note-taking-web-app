@@ -5,10 +5,12 @@ import { Button1 } from "../shared/Button";
 import home_icon from '../../assets/images/icon-home.svg'
 import home_icon_copy from '../../assets/images/icon-home copy.svg'
 import chevron_right from '../../assets/images/icon-chevron-right.svg'
+import chevron_right_dark from '../../assets/images/icon-chevron-right dark.svg'
 import ListOfNotes from "./ListOfNotes";
 import archive_icon from '../../assets/images/icon-archive.svg'
 import archive_icon_copy from '../../assets/images/icon-archive copy.svg'
 import logo from '../../assets/images/logo.svg'
+import logo_dark from '../../assets/images/logo dark.svg'
 import plus from '../../assets/images/icon-plus.svg'
 import ListOfTags from "./ListOfTags";
 import SelectedTagList from "./SelectedTagList";
@@ -22,6 +24,7 @@ import SettingsOptions from "./SettingsOptions";
 import ColorTheme from "./ColorTheme";
 import FontTheme from "./FontTheme";
 import ChangePassword from "../auth/ChangePassword";
+import { useTheme } from "../shared/useTheme";
 
 
 const Notes = () => {
@@ -41,14 +44,9 @@ const Notes = () => {
     
     //note id state to help with seleecting note to edit
     
-    
+    const {theme} = useTheme();
     const {states} = useNote();
-    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes, searchInput, searchNoteId, setSearchNoteId, showSettings, setShowSettings,     isThemeModalOpen, 
-        setIsThemeModalOpen,
-        isFontModalOpen, 
-        setIsFontModalOpen,
-        isPasswordModalOpen, 
-        setIsPasswordModalOpen } = states;
+    const {selectedTag, setSelectedTag, tagNoteId, setTagNoteId, archivedNoteId, noteId, setNoteId,showAllNotes, setShowAllNotes, showAllArchived, setShowAllArchived, create, setCreate, notes, setNotes, searchInput, searchNoteId, setSearchNoteId, showSettings, setShowSettings,     isThemeModalOpen,         isFontModalOpen, isPasswordModalOpen, mobileCreate } = states;
     
 
     const handleNotesDisplay = () => {
@@ -87,44 +85,49 @@ const Notes = () => {
     
     return (
         <>
-        <section className="w-375 largePhone:w-410 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:hidden  ">
+        <section className="w-375 largePhone:w-410 min-h-screen bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:hidden dark:bg-neutral-950 dark:text-white   ">
             
 
-            {!create ?
+            {!mobileCreate ?
             <ListOfNotes
-                notes={notes}
-                setNotes={setNotes}
                 noteId={noteId}
                 setNoteId={setNoteId}
-                setCreate={setCreate}
+                
             />
             :
             (!noteId ? 
                 <CreateNote 
-                    notes={notes} 
-                    setNotes={setNotes} 
                     currentNote={currentNote} 
                     setCurrentNote={setCurrentNote} 
-                    setCreate={setCreate} onClose={() => setCreate(false)}
+                    
                 /> 
                 : <EditNote 
                     noteId={noteId} 
                     setNoteId={setNoteId} 
-                    onClose={() => setCreate(false)}
+                    
                 />
             )
             }
         </section>
 
-        <div className="hidden lg:flex lg:flex-row w-screen px-6">
+        <div className="hidden lg:flex lg:flex-row w-screen px-6 dark:text-white ">
 
             <section className="lg:w-1/4 lg:min-h-screen lg:max-h-screen flex flex-col lg:mr-auto lg:border-r lg:border-gray-200 lg:px-2 ">
                 <div className="flex flex-col justify-center items-start h-20">
-                    <img 
-                        src={logo} 
-                        alt="logo" 
-                        className=" "    
-                    />
+                    
+                     {theme === 'light' ?
+                        <img 
+                            src={logo} 
+                            alt='logo' 
+                            className='h-8 ' 
+                                  
+                        />
+                        :
+                        <img 
+                            src={logo_dark} 
+                            alt='logo' 
+                            className='h-8 cur ' 
+                        />}
 
                 </div>
 
@@ -143,12 +146,20 @@ const Notes = () => {
                         
                     />}
                     text='All Notes'
-                    image2={<img 
+                    image2={theme === 'light' ?
+                    <img 
                         src={chevron_right} 
                         alt="chevron icon" 
                         className={`${(showAllNotes && !selectedTag) ? "flex ml-auto" : "hidden"}`}
-                    />}
-                    className={`${(showAllNotes && !selectedTag) ? "bg-gray-200 rounded-xl" : ""} mt-4 w-full`}
+                    />
+                    :
+                    <img 
+                        src={chevron_right_dark} 
+                        alt="chevron icon" 
+                        className={`${(showAllNotes && !selectedTag) ? "flex ml-auto" : "hidden"}`}
+                    />
+                   }
+                    className={`${(showAllNotes && !selectedTag) ? "bg-gray-200 rounded-xl dark:bg-neutral-800" : ""} mt-4 w-full`}
                     buttonFunc={handleNotesDisplay}
                     
                 />
@@ -165,8 +176,8 @@ const Notes = () => {
                         alt="archive icon" 
                         className="h-5 w-5 mr-2"/>}
                     text='Archive'
-                    image2={<img src={chevron_right} alt="chevron icon" className={`${(showAllArchived && !selectedTag) ? "flex ml-auto" : "hidden"}`}/>}
-                    className={`${(showAllArchived && !selectedTag) ? "bg-gray-200 rounded-xl " : ""}  mt-2 w-full`}
+                    image2={theme === 'light' ? <img src={chevron_right} alt="chevron icon" className={`${(showAllArchived && !selectedTag) ? "flex ml-auto" : "hidden"}`}/> : <img src={chevron_right_dark} alt="chevron icon" className={`${(showAllArchived && !selectedTag) ? "flex ml-auto" : "hidden"}`}/>  }
+                    className={`${(showAllArchived && !selectedTag) ? "bg-gray-200 rounded-xl dark:bg-neutral-800 " : ""}  mt-2 w-full`}
                     
                     buttonFunc={handleArchiveNotesDisplay}
                     
@@ -179,7 +190,7 @@ const Notes = () => {
 
             </section>
 
-            <section className="hidden lg:flex lg:flex-col lg:bg-white w-full ">
+            <section className="hidden lg:flex lg:flex-col  w-full ">
 
                 <header className="h-16 flex justify-between items-center px-4 border-b border-gray-200 w-full ">
                 
@@ -235,11 +246,11 @@ const Notes = () => {
                             <ListOfArchivedNotes/>
                         </div>}
 
-                        {selectedTag && <div>
+                        {(selectedTag && !searchInput) &&<div>
                             <SelectedTagList/>
                         </div>}
 
-                        {(searchInput && !selectedTag) && <div className="border-r border-black lg:p-5 min-h-screen">
+                        {(searchInput  && !selectedTag) && <div className="border-r border-black lg:p-5 min-h-screen">
                             <SearchList/>
                         </div>}
 
@@ -257,7 +268,7 @@ const Notes = () => {
                                 setNotes={setNotes} 
                                 currentNote={currentNote} 
                                 setCurrentNote={setCurrentNote} 
-                                setCreate={setCreate} onClose={() => setCreate(false)}
+                                
                             /> 
                         : noteId && showAllNotes ?  
                             <EditNote 
@@ -291,6 +302,13 @@ const Notes = () => {
                         {(showAllArchived && archivedNoteId) && <div className="flex flex-col w-full ">
 
                             <RestoreBtn/>
+                            <DeleteBtn/>
+                            
+                        </div>}
+
+                        {(selectedTag && tagNoteId) && <div className="flex flex-col w-full ">
+
+                            <ArchiveBtn/>
                             <DeleteBtn/>
                             
                         </div>}

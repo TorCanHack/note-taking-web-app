@@ -164,6 +164,15 @@ export const fetchServices = {
     } catch (error) {
       throw new Error(error.message || "An error occurred")
     }
+  },
+
+  deleteArchiveNote: async(id) =>{
+    try { 
+      const response = await api.delete(`/notes/archive/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.message || "An error occurred")
+    }
   }
 
 }

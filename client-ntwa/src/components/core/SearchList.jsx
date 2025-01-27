@@ -27,12 +27,12 @@ const SearchList = () => {
                     <h2 className="font-semibold text-base mb-3">
                         <button onClick={() => handleSearchClick(note._id)}>{note.title}</button>
                     </h2>
-                    <ul className="flex flex-row flex-wrap mb-3  w-full ">
+                    <ul className="flex flex-row flex-wrap mb-3 -ml-1  w-full ">
                         {note.tags.map((tag, i) => (
-                            <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1 mt-1 -ml-1">{tag}</li>
+                            <li key={i} className="bg-gray-200  mx-1 text-xs rounded-md p-1 mt-1  dark:bg-gray-600">{tag}</li>
                         ))}
                     </ul>
-                    <p className="text-xs text-gray-700">
+                    <p className="text-xs text-gray-700 dark:text-gray-300">
                         {new Date(note.lastEdited).toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: 'short',

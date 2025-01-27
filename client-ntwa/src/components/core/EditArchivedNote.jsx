@@ -8,20 +8,15 @@ import { fetchServices, postServices } from './Api'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Navigation from '../shared/Navigation'
 import { useNote } from '../shared/useNote'
-import { BackBtn, CancelBtn, DeleteBtn, LastEdited, NoteInput, RestoreBtn, SaveBtn, TagInput, TitleInput } from '../shared/NoteComponents'
+import { BackBtn, CancelBtn, DeleteBtn, LastEdited, NoteInput, RestoreBtn, SaveBtn, TagInput, TitleInput, DeleteModal, ArchiveModal, Overlay  } from '../shared/NoteComponents'
 
 
 const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
 
     const navigate = useNavigate()
-
-    
-
-   
-
     const [error, setError] = useState({})
     const {states} = useNote()
-    const { archivedNoteId, setArchivedNoteId, archivedNote, setArchivedNote} = states;
+    const { archivedNoteId, setArchivedNoteId, archivedNote, setArchivedNote, deleteModal, archiveModal} = states;
     
     useEffect(() => {
         const loadNote = async () => {
@@ -53,14 +48,10 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
     }
     
  
-    
-   
-    
-    
-
     return(
-        <form onSubmit={handleFormSubmission} className='p-4'>
+        <form onSubmit={handleFormSubmission} className='p-4 dark:text-white'>
             <div className='min-h-620 md:min-h-1024 lg:min-h-620 lg:max-h-screen lg:p-5'>
+                {(deleteModal || archiveModal) && <Overlay/>}
 
             <div className='border-b border-black flex flex-row justify-between py-2 lg:hidden'>
                 <BackBtn/>
@@ -75,7 +66,7 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
                 </div>
                                     
             </div>
-            <div className='border-b border-gray-700'>
+            <div className='border-b border-gray-700 '>
                 <TitleInput 
                     value={archivedNote.title} 
                     onChangeFunc={(e) => setArchivedNote({...archivedNote, title: e.target.value})}
@@ -95,15 +86,19 @@ const EditArchivedNote = ({ freshlyArchived, setFreshlyArchived }) => {
                 onChangeFunc={(e) => setArchivedNote({...archivedNote, content: e.target.value})}
             />
 
+            {deleteModal  && <DeleteModal/>}
+            {archiveModal && <ArchiveModal/>}
+
             <div className='hidden lg:flex  pt-2 -mt-1  '>
                 <SaveBtn/>
                 <CancelBtn/>
+
             </div>
                     
 
             {freshlyArchived && <p>Note Archived</p>}
             </div>
-            <Navigation/>
+            
         </form>
     )
 

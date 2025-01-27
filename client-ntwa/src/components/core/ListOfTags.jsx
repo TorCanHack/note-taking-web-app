@@ -3,16 +3,19 @@ import ReactLoading from 'react-loading'
 import { fetchServices } from './Api';
 import { useNote } from '../shared/useNote'
 import tag_icon from '../../assets/images/icon-tag.svg'
+import tag_icon_dark from '../../assets/images/icon-tag dark.svg'
+import { useTheme } from '../shared/useTheme';
 
 
    
 const ListOfTags = () => {
-    const [isLoading, setIsLoading] = useState(false);
+
     const [error, setError] = useState('');
     const [tags, setTags] = useState([]);
-    const {states, functions} = useNote()
-    const {setSelectedTag, setTagNoteId, notes} = states;
-    const {getNotesByTag} = functions;
+    const {theme} = useTheme()
+    const {states} = useNote()
+    const {setSelectedTag, notes, isLoading, setIsLoading, setSource} = states;
+    
     
 
     const getTags = async () => {
@@ -38,8 +41,7 @@ const ListOfTags = () => {
 
     const handleTag = (tag) => {
         setSelectedTag(tag)
-        
-
+        setSource("tags")
         
     }
 
@@ -60,7 +62,7 @@ const ListOfTags = () => {
                             {tags.map((tag) => (
                                 <div 
                                     key={tag}
-                                    className="border-b border-gray-300 mb-3 pb-3 "
+                                    className="border-b border-gray-300 mb-3 pb-3 dark:border-gray-500 "
                                 >
                                     <ul>
                                         <li>
@@ -68,11 +70,18 @@ const ListOfTags = () => {
                                                 className="flex flex-row justify-center items-center w-auto" 
                                                 onClick={() => handleTag(tag)}
                                             >
+                                                {theme === 'light' ? 
                                                 <img 
                                                     src={tag_icon} 
                                                     alt="tag icon" 
                                                     className="h-4 w-4 mr-2"
                                                 />
+                                                :
+                                                <img 
+                                                    src={tag_icon_dark} 
+                                                    alt="tag icon" 
+                                                    className="h-4 w-4 mr-2"
+                                                />}
                                                 {tag}
                                             </button>
                                         </li>

@@ -1,14 +1,20 @@
 import plus from '../../assets/images/icon-plus.svg'
 import { useNavigate } from 'react-router-dom'
+import { useNote } from './useNote';
 
 
 
-const PlusButton = ({setCreate}) => {
+const PlusButton = () => {
 
     const navigate = useNavigate();
+    const {states} = useNote()
+    const {setCreate, setMobileCreate} = states;
+
+
     const handeCreateButton = () => {
     
         setCreate(true)
+        setMobileCreate(true)
         navigate("/")
        }
 

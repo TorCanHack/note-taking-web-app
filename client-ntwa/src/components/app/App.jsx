@@ -2,6 +2,7 @@ import './App.css'
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg'
+import logo_dark from '../../assets/images/logo dark.svg'
 import Login from '../auth/Login'
 import ForgottenPassword from '../auth/ForgottenPassword'
 import PasswordReset from '../auth/PasswordReset'
@@ -13,6 +14,7 @@ import Tags from '../core/Tags';
 import { ThemeProvider } from '../shared/ThemeProvider';
 import Settings from '../core/Settings';
 import {NoteProvider} from '../shared/NoteProvider';
+import { useTheme } from '../shared/useTheme';
 
 // protected Route component to handle authentication
 const ProtectedRoute = ({ children }) => {
@@ -30,13 +32,16 @@ const Layout = ({ children }) => {
 
   
   const isAuthenticated = !!localStorage.getItem('token');
+  const {theme} = useTheme();
 
 
   return (
+    
     <main className='flex flex-col justify-center items-center w-375 largePhone:w-410  '>
       <div>
-        {isAuthenticated && <section className='bg-gray-200 '>
+        {isAuthenticated && <section className='bg-gray-200 dark:bg-neutral-950 '>
         <div className='h-14 flex justify-between items-center px-4 lg:hidden'>
+            {theme === 'light' ?
             <img 
               src={logo} 
               alt='logo' 
@@ -44,6 +49,14 @@ const Layout = ({ children }) => {
               onClick={() => navigate('/')}
               style={{ cursor: 'pointer' }}
             />
+            :
+            <img 
+              src={logo_dark} 
+              alt='logo' 
+              className='h-8 ' 
+              onClick={() => navigate('/')}
+              style={{ cursor: 'pointer' }}
+            />}
             
         </div>
         </section>}

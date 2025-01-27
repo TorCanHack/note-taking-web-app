@@ -56,7 +56,7 @@ const SelectedTagList = () => {
                     Go back
                 </button>
                 <div className="min-h-620 ">
-                    <h1 className="font-bold text-2xl mt-3 text-gray-500 lg:hidden">Notes Tagged: <span className="text-black">{selectedTag}</span> </h1>
+                    <h1 className="font-bold text-2xl mt-3 text-gray-500 lg:hidden">Notes Tagged: <span className="text-black dark:text-gray-300">{selectedTag}</span> </h1>
                     <p className="my-3">All notes with the &#34;{selectedTag}&#34; tag are shown here</p>
                     {tagNotes.map(note => (
                         <div 
@@ -70,10 +70,10 @@ const SelectedTagList = () => {
                             </h2>
                             <ul className="flex flex-row mb-2 -ml-2">
                                 {note.tags.map((tag, i) => (
-                                    <li key={i} className="bg-gray-300 mx-1 text-xs rounded-md p-1">{tag}</li>
+                                    <li key={i} className="bg-gray-300 mx-1 text-xs rounded-md p-1 dark:bg-gray-600 ">{tag}</li>
                                 ))}
                             </ul>
-                            <p className="text-xs text-gray-700">{new Date(note.lastEdited).toLocaleDateString('en-GB', {
+                            <p className="text-xs text-gray-700 dark:text-gray-300">{new Date(note.lastEdited).toLocaleDateString('en-GB', {
                                  day: '2-digit',
                                 month: 'short',
                                 year: 'numeric'

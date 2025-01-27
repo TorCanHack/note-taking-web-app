@@ -3,17 +3,22 @@ import { fetchServices } from "./Api";
 import ReactLoading from 'react-loading'
 import PlusButton from "../shared/PlusButton";
 import Navigation from "../shared/Navigation";
+import { useNote } from "../shared/useNote";
 
-const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
+const ListOfNotes = ({noteId, setNoteId}) => {
 
   
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const {states} = useNote();
+    const {notes, setNotes, setCreate, setMobileCreate} = states;
 
     const handleNoteClick = (note_Id) => {
         
         setNoteId(note_Id)
         setCreate(true)
+        setMobileCreate(true);
+        
 
     }
 
@@ -41,8 +46,8 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
 
     return (
         <section>
-            <div> 
-                <article className="min-h-620  mb-3 "> 
+            <div className="min-h-screen"> 
+                <article className="min-h-620  mb-3"> 
                     <h1 className="font-bold text-2xl mb-3 lg:hidden ">
                         All Notes
                     </h1>
@@ -52,7 +57,7 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
     
                         <div 
                             key={note._id} 
-                            className={`w-full border-b border-gray-400 pb-3 my-3 ${noteId === note._id ? "bg-gray-200" : ""}`}
+                            className={`w-full border-b border-gray-400 pb-3 my-3 ${noteId === note._id ? "lg:bg-gray-200  dark:bg-neutral-800" : ""}`}
                         >
     
     
@@ -60,13 +65,13 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
                                 <button onClick={() => handleNoteClick(note._id)}>{note.title}</button>
 
                     </h2>
-                    {note.tags.length > 0  && <ul className="flex flex-row flex-wrap mb-3  w-full ">
+                    {note.tags.length > 0  && <ul className="flex flex-row flex-wrap mb-3  w-full -ml-1 ">
                         {note.tags.map((tag, i) => (
-                            <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1 mt-1">{tag}</li>
+                            <li key={i} className="bg-gray-200 mx-1 text-xs rounded-md p-1 mt-1   dark:bg-neutral-600">{tag}</li>
                         ))}
                     </ul>}
     
-                    <p className="text-xs text-gray-700">
+                    <p className="text-xs text-gray-700 dark:text-white">
                         {new Date(note.lastEdited).toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: 'short',
@@ -91,13 +96,15 @@ const ListOfNotes = ({notes, setNotes, noteId, setNoteId, setCreate}) => {
 
             </div></article>
                         
-            <PlusButton setCreate={setCreate}/>
-            <div className="mt-3"></div>
+            
+            
 
-            <Navigation/>
+            
             
             </div> 
-            
+            <PlusButton/>
+            <div className="mt-3"></div>
+            <Navigation/>
         </section>
     )
 

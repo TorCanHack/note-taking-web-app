@@ -3,10 +3,16 @@ import { passwordServices } from "../core/Api";
 import Password from "../shared/Password";
 import { useNavigate } from "react-router-dom";
 import arrow_left_icon from '../../assets/images/icon-arrow-left.svg';
+import arrow_left_icon_dark from '../../assets/images/icon-arrow-left copy.svg';
+import { useNote } from "../shared/useNote";
+import { useTheme } from "../shared/useTheme";
 
-const ChangePassword = ({setIsPasswordModalOpen, setIsModalOpen}) => {
+const ChangePassword = () => {
 
     const navigate = useNavigate();
+    const {theme} = useTheme()
+    const {states} = useNote();
+    const {setIsPasswordModalOpen, setIsModalOpen} = states;
 
     const [passwordForm, setPasswordForm] = useState({
         currentPassword: "",
@@ -58,11 +64,19 @@ const ChangePassword = ({setIsPasswordModalOpen, setIsModalOpen}) => {
                 onClick={handleBackToSettings} 
                 className="flex flex-row items-center text-sm lg:hidden "
             >
+                {theme === 'light' ?
                 <img 
                     src={arrow_left_icon} 
                     alt='arrow icon' 
                     className="w-4 h-4"
                 />
+                :
+                <img 
+                src={arrow_left_icon_dark} 
+                alt='arrow icon' 
+                className="w-4 h-4"
+                />}
+                
                 Settings
             </button>
 

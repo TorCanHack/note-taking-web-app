@@ -11,29 +11,29 @@ import PlusButton from '../shared/PlusButton';
 import Navigation from '../shared/Navigation'
 import PropTypes from 'prop-types';
 import SettingsOptions from './SettingsOptions';
+import { useNote } from '../shared/useNote';
 
 
 
 
-const Settings = ({setCreate}) => {
+const Settings = () => {
 
    
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
-    const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    
+    const {states} = useNote();
+    const {isModalOpen, isThemeModalOpen, isFontModalOpen, isPasswordModalOpen, setCreate} = states
 
    
     
     
     return (
-        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-full   "> { !isModalOpen ?
+        <section className="w-375 bg-white rounded-t-lg pt-3 px-4 md:w-768 lg:w-full dark:bg-neutral-950 dark:text-white "> { !isModalOpen ?
             <SettingsOptions/>
 
             : <div className='lg:hidden'> 
-            {isThemeModalOpen && <ColorTheme setIsThemeModalOpen={setIsThemeModalOpen} setIsModalOpen={setIsModalOpen}/>}
-            {isFontModalOpen && <FontTheme setIsFontModalOpen={setIsFontModalOpen} setIsModalOpen={setIsModalOpen}/>}
-            {isPasswordModalOpen && <ChangePassword setIsPasswordModalOpen={setIsPasswordModalOpen} setIsModalOpen={setIsModalOpen}/>}
+            {isThemeModalOpen && <ColorTheme/>}
+            {isFontModalOpen && <FontTheme/>}
+            {isPasswordModalOpen && <ChangePassword/>}
 
             </div>}
 

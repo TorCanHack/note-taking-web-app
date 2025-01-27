@@ -27,6 +27,7 @@ export const NoteProvider = ({children}) => {
         
     })
 
+    const [mobileCreate, setMobileCreate] = useState(false);
     const [notes, setNotes] = useState([]);
     const [searchNotes, setSearchNotes] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
@@ -51,6 +52,8 @@ export const NoteProvider = ({children}) => {
     const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
     const [isFontModalOpen, setIsFontModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [showMobileNotes, setShowMobileNotes] = useState(false);
+    const [source, setSource] = useState(null)
 
     const activateDeleteModal = (e) => {
         e.preventDefault();
@@ -76,10 +79,20 @@ export const NoteProvider = ({children}) => {
         e.preventDefault()
 
         try {
-            await fetchServices.deleteNote(noteId)
+           
+            if (noteId) {
+                await fetchServices.deleteNote(noteId) 
+            } else if (archivedNoteId) {
+                await fetchServices.deleteArchiveNote(archivedNoteId) 
+            }
+
             setNoteId(null)
+            setArchivedNoteId(null)
+            setTagNoteId(null)
             setDeleteModal(false)
             setShowAllNotes(true)
+            setMobileCreate(false)
+
             
         } catch (error) {
             setError(error)
@@ -110,6 +123,7 @@ export const NoteProvider = ({children}) => {
         setArchivedNoteId(null)
         setNoteId(null)
         setCreate(false)
+        setMobileCreate(false)
         setTagNoteId(null)
         
     }
@@ -118,17 +132,12 @@ export const NoteProvider = ({children}) => {
 
         e.preventDefault();
         
+        setShowMobileNotes(false)
+        setTagNoteId(null)
+        setCreate(false)
+        setMobileCreate(false)
+        setNoteId(null)
         
-        
-        if (source === "tags") {
-            navigate("/tags")
-            setNoteId(null)
-
-        } else {
-            navigate("/")
-            setNoteId(null)
-            onClose();
-        }
 
 
     }
@@ -141,6 +150,7 @@ export const NoteProvider = ({children}) => {
             /*navigate("/archive")**/
             setNoteId(restoredNote._id)
             setArchivedNoteId(null)
+            setShowMobileNotes(false)
             setShowAllNotes(true)
             setShowAllArchived(false)
         } catch (error) {
@@ -194,6 +204,7 @@ export const NoteProvider = ({children}) => {
         const {value} = e.target
         setSearchInput(value)
         debouncedGetNotes(value)
+        setSelectedTag(null)
         
 
     }
@@ -255,7 +266,13 @@ export const NoteProvider = ({children}) => {
         isFontModalOpen, 
         setIsFontModalOpen,
         isPasswordModalOpen, 
-        setIsPasswordModalOpen
+        setIsPasswordModalOpen,
+        showMobileNotes, 
+        setShowMobileNotes,
+        source, 
+        setSource,
+        mobileCreate, 
+        setMobileCreate
 
     }
 

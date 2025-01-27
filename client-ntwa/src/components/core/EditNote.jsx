@@ -21,7 +21,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     
     
     const [archivedNoteId, setArchivedNoteId] = useState(null);
-    const {deleteModal, archiveModal, showArchivedNote, note, setNote} = states;
+    const {deleteModal, archiveModal, showArchivedNote, note, setNote, setMobileCreate} = states;
     const [error, setError] = useState('')
 
     
@@ -48,7 +48,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
         try {
             await fetchServices.updateFetchedNote(noteId, updatedNote)
             setNoteId(null)
-            onClose(); 
+            setMobileCreate(false) 
         } catch (error) {
             setError(error)
         }
@@ -75,9 +75,7 @@ const EditNote = ({noteId, onClose, setNoteId, source}) => {
     return (
         <form 
             onSubmit={handleFormSubmission}
-            id="note"
-            
-            
+            id="note"  
         >
             <div className=" min-h-620 md:min-h-1024 lg:min-h-620 lg:max-h-screen lg:p-5 ">
             {(deleteModal || archiveModal) && <Overlay/>}
